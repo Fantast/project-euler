@@ -1,0 +1,102 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.0'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      2549,         68]*)
+(*NotebookOutlinePosition[      3195,         90]*)
+(*  CellTagsIndexPosition[      3151,         86]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(For[d = 2; max = 0, 
+      d \[LessEqual] 1000, \(d++\), \[IndentingNewLine]{\[IndentingNewLine]\ 
+        If[FractionalPart[Sqrt[d]] \[Equal] 0, \ 
+          Continue[]], \[IndentingNewLine]\ 
+        t\  = \ Reduce[
+              x\^2 - d*\ y\^2 == 1 && x > 0 && 
+                y > 0 && \((x | y)\) \[Element] Integers, {x, y}] /. 
+            C[1] \[Rule] 1, \[IndentingNewLine]\ 
+        If[Depth[t] \[LessEqual] 3, val = \(t[\([1]\)]\)[\([2]\)], 
+          val = \(\(t[\([1]\)]\)[\([1]\)]\)[\([2]\)]], \[IndentingNewLine]\ 
+        If[val > max, {max = val, \ 
+            dmax = d}]\[IndentingNewLine]}\[IndentingNewLine]]\
+\[IndentingNewLine]
+    Print["\<D: \>", \ dmax]\[IndentingNewLine]
+    Print["\<X: \>", \ max]\)\)\)], "Input"]
+},
+FrontEndVersion->"5.0 for Microsoft Windows",
+ScreenRectangle->{{0, 1280}, {0, 926}},
+WindowSize->{1145, 772},
+WindowMargins->{{Automatic, 48}, {Automatic, 17}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 791, 15, 235, "Input"]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

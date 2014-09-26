@@ -1,0 +1,32 @@
+- could-be-interesting problems:
+    - 361, 362
+
+- triangular problems to solve
+    - 153, 253, 276, 300, 325
+
+- lucky problems to solve
+    - !163, 189, 219, !223, !237, !259, .261
+
+
+!!Math atlas: http://www.math.niu.edu/~rusin/known-math/index/11PXX.html
+
+- different primality tests/sieves/generators, numbers factorization:
+    - http://www.devalco.de -> http://109.90.3.58/devalco/
+
+
+- Number of ways to express the number as sum of 2 squares:
+    - http://www.math.niu.edu/~rusin/known-math/93_back/2squares
+
+- Pythagorean triples:
+    - document about generating Pythagorean [and other] triples and more stuff:
+        - http://pythag.net/node24.html
+    - Task numbers: 138, 139, 143, 176, 195 (generating 60-degree triples)
+    - Generating:
+        a = m^2 - n^2;
+        b = 2*m*n;
+        c = m^2 + n^2;
+    - General approach of parametrization of equations like: X^2 + X*Y + Y^2 = Z^2;
+        - http://projecteuler.net/problem=143
+            one of the comments in the forum shows general way of parametrizing possible integer roots of equeations like
+        - http://projecteuler.net/thread=195;page=2 - comment of "daniel.is.fischer"
+
