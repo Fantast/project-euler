@@ -1,4 +1,4 @@
 project-euler
 =============
 
-Solutions for Project Euler's problems, written on java.
+Solutions for Project Euler's problems, mostly written on java.
