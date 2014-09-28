@@ -4,6 +4,8 @@ import utils.MyMath;
 import utils.log.Logger;
 import utils.structures.RedBlackBST;
 
+import java.util.TreeSet;
+
 import static utils.structures.RedBlackBST.Processor;
 
 //Answer :
@@ -15,7 +17,7 @@ public class Task_464 extends AbstractTask {
     }
     
 //    public int LIM = 20000000;
-    public int LIM = 20000;
+    public int LIM = 25;
 
     int n;
     int factorCnt;
@@ -40,8 +42,10 @@ public class Task_464 extends AbstractTask {
 //        99*n(b) - 100*p(b) <= 99*n(a-1) - 100*p(a-1)
 //        99*p(b) - 100*n(b) <= 99*p(a-1) - 100*n(a-1)
 
-        MyMath.setMaxPrimesToCache(200000);
+        MyMath.setMaxPrimesToCache(2000000);
         long[] primes = MyMath.getCachedPrimes();
+
+        TreeSet<Integer> all = new TreeSet<>();
 
         System.out.println("Go");
         m1[0] = new Pair(0, 0);
@@ -85,8 +89,12 @@ public class Task_464 extends AbstractTask {
             } else {
                 neg[n] = neg[n-1];
             }
-            f1[n] = 99*neg[n] - 100*pos[n];
-            f2[n] = 99*pos[n] - 100*neg[n];
+//            f1[n] = 99*neg[n] - 100*pos[n];
+            f1[n] = 99*(neg[n] + pos[n]) - 199*pos[n];
+//            f2[n] = 99*pos[n] - 100*neg[n];
+            f2[n] = -f1[n] - (pos[n] + neg[n]);
+
+            all.add(f1[n]);
             m1[n] = new Pair(n, f1[n]);
             m2[n] = new Pair(n, f2[n]);
             
@@ -94,8 +102,13 @@ public class Task_464 extends AbstractTask {
             mk2[n] = new Pair(n, f2[n] - 1);
         }
 
+        System.out.println("Distinct: " + all.size());
+
         timeStamp();
-        bruteForce();
+        for (int i = 1; i <= LIM; ++i) {
+            System.out.println(i + ": " + meb[i] + ":  " + bruteForce(i));
+        }
+//        bruteForce(LI);
         timeStamp();
 
         System.out.println("-----------------");
@@ -150,6 +163,10 @@ public class Task_464 extends AbstractTask {
             res += outres[0];
             t1.put(m1[n - 1], m1[n - 1]);
             t2.put(m2[n - 1], m1[n - 1]);
+
+//            System.out.println("----------------------------------");
+//            System.out.println(t1.keys());
+//            System.out.println(t2.keys());
         }
         timeStamp();
 
@@ -157,9 +174,10 @@ public class Task_464 extends AbstractTask {
 
     }
 
-    private void bruteForce() {
+    private long bruteForce(int n) {
         long res = 0;
-        for (int b = 1; b <= LIM; ++b) {
+        for (int b = 1; b <= n; ++b) {
+            progress10000(b);
             for (int a = 1; a <= b; ++a) {
                 int pab = P(a, b);
                 int nab = N(a, b);
@@ -169,7 +187,8 @@ public class Task_464 extends AbstractTask {
                 }
             }
         }
-        System.out.println("Brute-forced: " + res);
+//        System.out.println("Brute-forced: " + res);
+        return res;
     }
 
     private int P(int a, int b) {
@@ -203,7 +222,7 @@ public class Task_464 extends AbstractTask {
         }
 
         public String toString() {
-            return n + "->" + f;
+            return n + ":" + f;
         }
     }
 
