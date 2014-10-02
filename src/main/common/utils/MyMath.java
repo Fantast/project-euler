@@ -39,6 +39,22 @@ public class MyMath {
         1000000000000000000L
     };
 
+    //see https://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+    private static int LogTable256[] = new int[]{
+            -1, 0,
+            1, 1,
+            2, 2, 2, 2,
+            3, 3, 3, 3, 3, 3, 3, 3,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+            6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+            6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+            7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+            7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+            7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+            7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7
+    };
+
     private static ArrayList<Long> cachedPrimes;
     private static long lastCachedPrime;
 
@@ -471,6 +487,22 @@ public class MyMath {
         return res;
     }
 
+    //see here: https://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+    public static int mostSignificantBit(int n) {
+        int tt = n >> 16;
+        if (tt != 0) {
+            int t = tt >> 8;
+            return (t != 0) ? 24 + LogTable256[t] : 16 + LogTable256[tt];
+        } else {
+            int t = n >> 8;
+            return (t != 0) ? 8 + LogTable256[t] : LogTable256[n];
+        }
+    }
+
+    public static int mostSignificantPowerTwo(int n) {
+        return 1 << mostSignificantBit(n);
+    }
+
     public static int sumOfDigits(long n) {
         int sum = 0;
         while (n != 0) {
@@ -766,6 +798,4 @@ public class MyMath {
 
         return R;
     }
-
-
 }
