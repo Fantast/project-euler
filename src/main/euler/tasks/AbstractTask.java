@@ -34,6 +34,14 @@ public abstract class AbstractTask implements ITask {
         return progress(progress, 1000000);
     }
 
+    public static boolean progress10000000(long progress) {
+        return progress(progress, 10000000);
+    }
+
+    public static boolean progress100000000(long progress) {
+        return progress(progress, 100000000);
+    }
+
     public static boolean progress(long progress, long mod) {
         if (progress % mod == 0) {
             progress("Progress: ", progress);
