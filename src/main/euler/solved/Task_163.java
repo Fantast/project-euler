@@ -2,7 +2,9 @@ package solved;
 
 import tasks.ITask;
 import tasks.Tester;
+import utils.Geometry;
 import utils.PointD;
+import utils.Segment;
 import utils.log.Logger;
 
 import javax.swing.*;
@@ -10,6 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import static java.lang.Math.*;
+import static utils.Geometry.EPS;
 
 //Answer : 343047
 public class Task_163 implements ITask {
@@ -80,9 +83,9 @@ public class Task_163 implements ITask {
                 Segment sb = segments[b];
                 for (int c = b + 1; c < sn; c++) {
                     Segment sc = segments[c];
-                    PointD ab = intersect(sa, sb);
-                    PointD ac = intersect(sa, sc);
-                    PointD bc = intersect(sb, sc);
+                    PointD ab = Geometry.intersect(sa, sb);
+                    PointD ac = Geometry.intersect(sa, sc);
+                    PointD bc = Geometry.intersect(sb, sc);
                     if (ab != null && ac != null && bc != null && !equals(ab, ac)) {
                         ++res;
                     }
@@ -92,84 +95,8 @@ public class Task_163 implements ITask {
         System.out.println(res);
     }
 
-    public static double twistedProduct(PointD a1, PointD a2, PointD b1, PointD b2) {
-        return (a2.x - a1.x) * (b2.y - b1.y) - (a2.y - a1.y) * (b2.x - b1.x);
-    }
-
-    private PointD intersect(Segment sa, Segment sb) {
-        return intersect(sa.x1, sa.y1, sa.x2, sa.y2, sb.x1, sb.y1, sb.x2, sb.y2);
-    }
-
-    private PointD intersect(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
-        PointD p1 = new PointD(x1, y1);
-        PointD p2 = new PointD(x2, y2);
-        PointD p3 = new PointD(x3, y3);
-        PointD p4 = new PointD(x4, y4);
-
-        return intersect(p1, p2, p3, p4);
-    }
-
-    public static PointD intersect(PointD a1, PointD a2, PointD b1, PointD b2) {
-        double z1 = twistedProduct(a1, a2, a1, b1);
-        double z2 = twistedProduct(a1, a2, a1, b2);
-
-        double z3 = twistedProduct(b1, b2, b1, a1);
-        double z4 = twistedProduct(b1, b2, b1, a2);
-
-        double z12 = z1 * z2;
-        double z34 = z3 * z4;
-        if (Math.abs(z1) > EPS && Math.abs(z2) > EPS && Math.abs(z3) > EPS && Math.abs(z4) > EPS) {
-            if (z12 > 0 || z34 > 0) return null;
-        }
-
-// p1M = p1p2 * [p3p4, p3p1] / [p1p2, p3p4];
-
-        double z = twistedProduct(a1, a2, b1, b2);
-        double mx = (a1.x * z + (a2.x - a1.x) * z3) / z;
-        double my = (a1.y * z + (a2.y - a1.y) * z3) / z;
-
-        return new PointD(mx, my);
-    }
-
-    private final static double EPS = 1e-6;
-
     private boolean equals(PointD a, PointD b) {
         return abs(a.x - b.x) < EPS && abs(a.y - b.y) < EPS;
-    }
-
-    static class Segment {
-        private final double x1;
-        private final double y1;
-        private final double x2;
-        private final double y2;
-
-        public Segment(double x1, double y1, double x2, double y2) {
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-        }
-
-        public int x1() {
-            return (int) x1;
-        }
-
-        public int y1() {
-            return (int) y1;
-        }
-
-        public int x2() {
-            return (int) x2;
-        }
-
-        public int y2() {
-            return (int) y2;
-        }
-
-        @Override
-        public String toString() {
-            return "{" + x1 + "," + y1 + "," + x2 + "," + y2 + '}';
-        }
     }
 
     public class Visualizer2 extends JFrame {
