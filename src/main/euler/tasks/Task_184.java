@@ -12,13 +12,14 @@ public class Task_184 extends AbstractTask {
         Logger.close();
     }
 
-    public int r = 105;
+//    public int r = 105;
+    public int r = 2;
     public int r2 = r*r;
 
     Point ps[] = new Point[40000];
     PointD vi[][] = new PointD[40000][220];
 
-    PointD ci[] = new PointD[220];
+    PointD ci1[] = new PointD[220];
     PointD ci2[] = new PointD[220];
 
     int pc = 0;
@@ -26,7 +27,7 @@ public class Task_184 extends AbstractTask {
         System.out.println("Generate points...");
         for (int vx = -r+1; vx < r; ++vx) {
             double vy = Math.sqrt(r2 - vx*vx);
-            ci[vx + r] = new PointD(vx, vy);
+            ci1[vx + r] = new PointD(vx, vy);
             ci2[vx + r] = new PointD(vx, -vy);
         }
 
@@ -54,21 +55,34 @@ public class Task_184 extends AbstractTask {
             Point pa = ps[a];
             for (int b = a+1; b < pc; ++b) {
                 Point pb = ps[b];
+                System.out.println("---------------------------------");
+                System.out.println(pa + " " + pb);
 
                 for (int x = -r+1; x < r; ++x) {
+                    PointD va = vi[a][x + r];
+                    PointD vb = vi[b][x + r];
                     if (x == 0) {
                         if (pa.x < 0 && pb.x > 0 || pa.x > 0 && pb.x < 0) {
+                            System.out.println("  x = " + x + ": " + (r-1));
                             res += r - 1;
                         }
                     } else {
-                        PointD va = vi[a][x + r];
-                        PointD vb = vi[b][x + r];
 
                         if (va != null && vb != null) {
-                            res += between(va, vb);
-                        } else if (va != null || vb != null) {
-                            PointD cr = ci[x + r]; // +
+                            double mny = Math.min(va.y, vb.y);
+                            double mxy = Math.max(va.y, vb.y);
 
+                            PointD cr1 = ci1[x + r]; // +
+                            PointD cr2 = ci2[x + r]; // -
+
+                            mxy = Math.min(mxy, cr1.y);
+                            mny = Math.max(mny, cr2.y);
+
+                            long dr = between(mny, mxy);
+                            res += dr;
+                            if (dr != 0) {
+                                System.out.println("  x = " + x + ": " + dr);
+                            }
                         }
                     }
                 }
@@ -78,10 +92,7 @@ public class Task_184 extends AbstractTask {
         System.out.println(res/3);
     }
 
-    private long between(PointD va, PointD vb) {
-        double mny = Math.min(va.y, vb.y);
-        double mxy = Math.max(va.y, vb.y);
-
+    private long between(double mny, double mxy) {
         int mni = (int) mny;
         int mxi = (int) mxy;
 
@@ -119,17 +130,17 @@ public class Task_184 extends AbstractTask {
         // x = +- r * px * sqrt( 1/(px^2 + py^2) );
         // y = +- r * py * sqrt( 1/(px^2 + py^2) );
 
-        double sq = Math.sqrt(p.x*p.x + p.y*p.y);
-        double x = -r * p.x / sq;
-        double y = -r * p.y / sq;
-
-        if (x > 0 && vx >= x) {
-            return null;
-        }
-
-        if (x < 0 && vx <= x) {
-            return null;
-        }
+//        double sq = Math.sqrt(p.x*p.x + p.y*p.y);
+//        double x = -r * p.x / sq;
+//        double y = -r * p.y / sq;
+//
+//        if (x > 0 && vx >= x) {
+//            return null;
+//        }
+//
+//        if (x < 0 && vx <= x) {
+//            return null;
+//        }
 
         double vy = p.y * vx / (double)p.x;
 
