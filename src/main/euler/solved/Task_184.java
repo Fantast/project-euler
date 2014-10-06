@@ -7,6 +7,8 @@ import utils.PointD;
 import utils.log.Logger;
 
 //Answer : 1725323624056
+// can be much faster, if to count points in a sector we sort all points by polar angle
+// and use binary search to find edge points
 public class Task_184 extends AbstractTask {
     public static void main(String[] args) {
         Logger.init("default.log");
