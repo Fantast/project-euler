@@ -7,5 +7,6 @@ pom.xml.next
 release.properties
 
 **/.idea/workspace.xml
+/files/primes.dat
 
 default.log

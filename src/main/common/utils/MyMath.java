@@ -1,21 +1,17 @@
 package utils;
 
-import org.apfloat.ApintMath;
 import org.apfloat.Apint;
+import org.apfloat.ApintMath;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 import static java.lang.Math.*;
-import static java.math.BigInteger.ONE;
-import static java.math.BigInteger.ZERO;
-import static java.math.BigInteger.valueOf;
+import static java.math.BigInteger.*;
 
 public class MyMath {
     public static long pow10[] = {
@@ -236,6 +232,8 @@ public class MyMath {
         initPrimesList();
         ArrayList<Long> all = new ArrayList<Long>();
 
+        long sqN = (long) Math.sqrt(n);
+
         for (long p : cachedPrimes) {
             if (n % p == 0) {
                 all.add(p);
@@ -244,7 +242,7 @@ public class MyMath {
                 }
             }
 
-            if (p * p >= n) {
+            if (p > sqN) {
                 if (n != 1) {
                     all.add(n);
                 }
@@ -268,11 +266,55 @@ public class MyMath {
             all.add(n);
         }
 
-        // not needed
-//        Collections.sort(all);
+        return all;
+    }
+
+    public static Map<Long, Integer> factor(long n) {
+        initPrimesList();
+
+        Map<Long, Integer> all = new HashMap<>();
+
+        long sqN = (long) Math.sqrt(n);
+
+        for (long p : cachedPrimes) {
+            if (n % p == 0) {
+                int cnt = 0;
+                while (n % p == 0) {
+                    n /= p;
+                    ++cnt;
+                }
+                all.put(p, cnt);
+            }
+
+            if (p > sqN) {
+                if (n != 1) {
+                    all.put(n, 1);
+                }
+                return all;
+            }
+        }
+
+        long last = lastCachedPrime;
+        assert ((last & 1) != 0);
+
+        for (long i = last + 2; i * i <= n; i += 2) {
+            if (n % i == 0 && isPrime(i)) {
+                int cnt = 0;
+                while (n % i == 0) {
+                    n /= i;
+                    ++cnt;
+                }
+                all.put(i, cnt);
+            }
+        }
+
+        if (n != 1) {
+            all.put(n, 1);
+        }
 
         return all;
     }
+
 //    private static int MAX_PRIMES_TO_CACHE = 1500000;
     private static int MAX_PRIMES_TO_CACHE = 5800000;
 //    private static int MAX_PRIMES_TO_CACHE = 1300000;
