@@ -1,7 +1,8 @@
 package tasks;
 
-import java.io.File;
-import java.io.PrintStream;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import static utils.MyMath.doEratosthen;
 
@@ -13,13 +14,11 @@ public class PrimesGenerator {
 
     public static void main(String[] args) {
         primesCount = doEratosthen(primes, isPrime);
-
-        try {
-            PrintStream outFile = new PrintStream(new File("./files/primes.dat"));
+        try (BufferedWriter outFile = new BufferedWriter(new FileWriter("./files/primes.dat"))) {
             for (int i = 0; i < primesCount; ++i) {
-                outFile.println(primes[i]);
+                outFile.write(primes[i] + "\n");
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

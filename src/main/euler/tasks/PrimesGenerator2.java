@@ -1,7 +1,6 @@
 package tasks;
 
-import java.io.File;
-import java.io.PrintStream;
+import java.io.*;
 
 public class PrimesGenerator2 {
 
@@ -10,10 +9,10 @@ public class PrimesGenerator2 {
     static int primesCount = 0;
 
     public static void main(String[] args) {
-        try {
-            PrintStream outFile = new PrintStream(new File("./files/primes.dat"));
+        try (BufferedWriter outFile = new BufferedWriter(new FileWriter("./files/primes.dat"))) {
+
             primes[primesCount++] = 2;
-            outFile.println(2);
+            outFile.write(2 + "\n");
             for (long n = 3; n <= maxN; n += 2) {
                 long maxp = (long) (Math.sqrt(n) + 1);
                 boolean isPrime = true;
@@ -28,11 +27,10 @@ public class PrimesGenerator2 {
                 }
                 if (isPrime) {
                     primes[primesCount++] = n;
-                    outFile.println(n);
+                    outFile.write(n + "\n");
                 }
             }
-            outFile.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
