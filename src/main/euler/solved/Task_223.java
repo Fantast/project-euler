@@ -1,5 +1,7 @@
-package tasks;
+package solved;
 
+import tasks.AbstractTask;
+import tasks.Tester;
 import utils.MyMath;
 import utils.log.Logger;
 
@@ -9,7 +11,7 @@ import java.util.Map;
 
 import static utils.MyMath.factor;
 
-//Answer :
+//Answer : 61614848
 public class Task_223 extends AbstractTask {
     public static void main(String[] args) {
         Logger.init("default.log");
