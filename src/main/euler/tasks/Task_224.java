@@ -5,6 +5,8 @@ import utils.log.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -18,14 +20,23 @@ public class Task_224 extends AbstractTask {
         Logger.close();
     }
 
-    int LIM = 75000000;
+    //    int LIM = 75000000;
+    int LIM = 170;
 
     Map<Long, Squares> p = new HashMap<>();
 
-    public void solving() {
-        MyMath.setMaxPrimesToCache(4500000);
+    long[] primes;
+    int pc;
+    Set<Long> all = new TreeSet<>();
 
-        for (long prime : getCachedPrimesInternal()) {
+    public void solving() {
+//        MyMath.setMaxPrimesToCache(4500000);
+        MyMath.setMaxPrimesToCache(45000);
+
+        primes = getCachedPrimesInternal();
+        pc = primes.length;
+
+        for (long prime : primes) {
             if (prime % 4 == 1) {
                 long d[] = MyMath.decomposePrimeAsTwoSquares(prime);
                 p.put(prime, new Squares(min(d[0], d[1]), max(d[0], d[1])));
@@ -34,16 +45,39 @@ public class Task_224 extends AbstractTask {
             }
         }
 
-        System.out.println("start..");
-        for (int w = 2; w < LIM/2; ++w) {
-            progress1000000(w);
-            Map<Long, Integer> factors1 = MyMath.factor(w - 1);
-            Map<Long, Integer> factors2 = MyMath.factor(w + 1);
-            if (factors1 == factors2) {
-                System.out.print("");
-            }
+//        System.out.println("start..");
+//        for (int w = 2; w < LIM/2; ++w) {
+//            progress1000000(w);
+//            Map<Long, Integer> factors1 = MyMath.factor(w - 1);
+////            Map<Long, Integer> factors2 = MyMath.factor(w + 1);
+//            if (factors1 != factors1) {
+//                System.out.print("");
+//            }
+//        }
+//        System.out.println("end..");
+
+        generate(0, 2, 1);
+
+        System.out.println(all.size());
+    }
+
+    public void generate(int ind, long curr, long n) {
+        if (n < LIM && curr < LIM) {
+            all.add(n);
+        } else {
+            return;
         }
-        System.out.println("end..");
+
+        if (curr % 4 != 3) {
+            generate(ind, curr, n * curr);
+        } else {
+            generate(ind, curr, n * curr * curr);
+        }
+
+        for (ind = ind + 1; ind < pc; ++ind) {
+            curr = primes[ind];
+            generate(ind, curr, n);
+        }
     }
 
     public static class Squares {
