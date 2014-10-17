@@ -579,7 +579,7 @@ public class MyMath {
      * http://en.wikipedia.org/wiki/Cornacchia%27s_algorithm
      * http://www.schorn.ch/howto.html
      */
-    public static long[] decomposePrimeAsToSquares(long p) {
+    public static long[] decomposePrimeAsTwoSquares(long p) {
         assert p%4 == 1;
 
         long b;

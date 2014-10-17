@@ -10,12 +10,18 @@
 
 !!Math atlas: http://www.math.niu.edu/~rusin/known-math/index/11PXX.html
 
+- several usefull math algorithms
+    https://sites.google.com/site/indy256/algo/euclid
+
 - different primality tests/sieves/generators, numbers factorization:
     - http://www.devalco.de -> http://109.90.3.58/devalco/
 
 
 - Number of ways to express the number as sum of 2 squares:
     - http://www.math.niu.edu/~rusin/known-math/93_back/2squares
+
+- enumerating all wasy to decompose number as sum of 2 squares:
+    - http://mathoverflow.net/questions/29644/enumerating-ways-to-decompose-an-integer-into-the-sum-of-two-squares
 
 - Pythagorean triples:
     - document about generating Pythagorean [and other] triples and more stuff:
