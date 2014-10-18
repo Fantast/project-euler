@@ -22,6 +22,7 @@
 
 - enumerating all wasy to decompose number as sum of 2 squares:
     - http://mathoverflow.net/questions/29644/enumerating-ways-to-decompose-an-integer-into-the-sum-of-two-squares
+    - impemented in 224
 
 - Pythagorean triples:
     - document about generating Pythagorean [and other] triples and more stuff:

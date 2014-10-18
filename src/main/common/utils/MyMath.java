@@ -580,14 +580,19 @@ public class MyMath {
      * http://www.schorn.ch/howto.html
      */
     public static long[] decomposePrimeAsTwoSquares(long p) {
+        if (p == 2) {
+            return new long[]{1, 1};
+        }
         assert p%4 == 1;
 
         long b;
         if (p%8 == 5) {
             b = 2;
-        } else {
+        } else if (p%3 == 2) {
             b = 3;
-            int i = 1;
+        } else {
+            b = 5;
+            int i = 2;
             while (modPow(b, (p-1)/2, p) == 1) {
                 b = getCachedPrimesInternal()[++i];
             }
@@ -772,25 +777,21 @@ public class MyMath {
         return inv < 0 ? mod + inv : inv;
     }
 
-    public static long modPow(long a, long pow, long mod) {
-        assert (a >= 0 || pow >= 0);
+    public static long modPow(long n, long pow, long mod) {
+        assert (n >= 0 || pow >= 0);
 
         if (pow == 0) {
             return 1;
         }
 
-        while ((pow & 1) == 0) {
-            a = a * a % mod;
-            pow >>= 1;
-        }
-
-        long r = a;
-
-        while ((pow >>= 1) > 0) {
-            a = a * a % mod;
-            if ((pow & 1) != 0) {
-                r = r * a % mod;
+        long r = 1;
+        n = n % mod;
+        while (pow > 0) {
+            if ((pow & 1) == 1) {
+                r = r * n % mod;
             }
+            pow >>= 1;
+            n = n*n % mod;
         }
 
         return r;
