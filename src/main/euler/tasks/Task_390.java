@@ -5,7 +5,7 @@ import utils.log.Logger;
 import static java.lang.Math.sqrt;
 
 //Answer :
-public class Task_390 implements ITask {
+public class Task_390 extends AbstractTask{
     public static void main(String[] args) {
         Logger.init("default.log");
         Tester.test(new Task_390());
@@ -26,24 +26,30 @@ public class Task_390 implements ITask {
 //
 //        a + b + 4*a*b = S^2
 
-        long N = 100000000;
+        long N = 10000;
         long N2 = N*N;
+        System.out.println(N);
+        System.out.println(N2);
 
         long res = 0;
         long k2;
         long m2;
         for (long k = 1; k <= N; ++k) {
+            progress10000000(k);
             k2 = k*k;
-            for (long m = 1; m < k; ++m) {
+            for (long m = k; m <= N; ++m) {
                 m2 = m*m;
                 long S2 = k2 + m2 + 4*k2 * m2;
-                if  (S2 > N2) {
-                    break;
-                }
+//                if  (S2 > N2) {
+//                    break;
+//                }
 
                 long S = (long) sqrt(S2);
                 if (S*S == S2) {
                     res += S;
+                    long b = 2*k;
+                    long c = 2*m;
+                    System.out.println(b + " " + c + ": " + (b*b*c*c + b*b + c*c));
                 }
             }
         }
