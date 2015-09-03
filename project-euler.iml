@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/opener2014" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/scala" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/opener2015" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -20,4 +21,3 @@
     <orderEntry type="library" name="Maven: org.apache.commons:commons-math:2.2" level="project" />
   </component>
 </module>
-

@@ -52,6 +52,7 @@
                                 <source>src/main/euler</source>
                                 <source>src/main/scala</source>
                                 <source>src/main/opener2014</source>
+                                <source>src/main/opener2015</source>
                             </sources>
                         </configuration>
                     </execution>

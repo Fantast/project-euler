@@ -42,8 +42,7 @@ public class LongFraction implements Comparable<LongFraction> {
     private long gcd(long a, long b) {
         if ( a<0 ) return gcd(-a, b);
         if ( b<0 ) return gcd(a, -b);
-        if ( b==0 ) return a;
-        return gcd( b, a%b );
+        return MyMath.gcd(a, b);
     }
 
     public LongFraction add(LongFraction b) {
@@ -60,6 +59,14 @@ public class LongFraction implements Comparable<LongFraction> {
 
     public LongFraction divide(LongFraction b) {
         return new LongFraction( numer*b.denom, denom * b.numer );
+    }
+
+    public LongFraction divide(long n) {
+        return new LongFraction( numer, denom * n );
+    }
+
+    public LongFraction multiply(long n) {
+        return new LongFraction( numer*n, denom);
     }
 
     @Override

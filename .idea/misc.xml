@@ -3,6 +3,9 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <type id="JRUBY" />
+  </component>
   <component name="IdProvider" IDEtalkID="687A067D183FE85F8B3EF4EED81326BB" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
@@ -15,4 +18,3 @@
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
 </project>
-

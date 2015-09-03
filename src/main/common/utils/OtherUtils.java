@@ -211,4 +211,8 @@ public class OtherUtils {
         }
         return res;
     }
+
+    public static <T> T or(T value, T defaultValue) {
+        return value == null ? defaultValue : value;
+    }
 }
