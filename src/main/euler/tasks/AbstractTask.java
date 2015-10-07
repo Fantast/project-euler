@@ -1,9 +1,12 @@
 package tasks;
 
+import java.util.Random;
+
 public abstract class AbstractTask implements ITask {
-    
+
+    private static Random random = new Random();
     protected long lastTime = -1;
-    
+
     public void timeStamp() {
         long elapsed = Tester.timeElapsed();
         System.out.println("Working time: " + lastTime + " ms.");
@@ -56,5 +59,21 @@ public abstract class AbstractTask implements ITask {
 
     public static void progress(String message, long progress) {
         System.out.println(message + progress);
+    }
+
+    public static int randomInt(int n) {
+        return random.nextInt(n);
+    }
+
+    public static void swap(int a[], int i, int j) {
+        int t = a[i];
+        a[i] = a[j];
+        a[j] = a[i];
+    }
+
+    public static void swap(double a[], int i, int j) {
+        double t = a[i];
+        a[i] = a[j];
+        a[j] = a[i];
     }
 }
