@@ -65,6 +65,10 @@ public abstract class AbstractTask implements ITask {
         return random.nextInt(n);
     }
 
+    public static boolean randomBoolean() {
+        return random.nextBoolean();
+    }
+
     public static void swap(int a[], int i, int j) {
         int t = a[i];
         a[i] = a[j];
