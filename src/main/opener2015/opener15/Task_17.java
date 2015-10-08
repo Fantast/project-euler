@@ -25,7 +25,6 @@ public class Task_17 extends AbstractTask {
         int a[] = new int[rr2];
         String ch[] = new String[rr2];
 
-
         int opened = 0; //..brackets
         for (int i = 0; i < rr2; i++) {
             boolean open;
@@ -40,9 +39,23 @@ public class Task_17 extends AbstractTask {
             ch[i] = open ? "(" : ")";
             opened += open ? 1 : -1;
         }
+
+//        for (int x = 0; x < rn; ++x) {
+//            var k = rr - 1 - y - a[x];
+//
+//            //b[k][x] = a[x] === 0 ? '\\' : '/';
+//
+//            var p = b[k].split('');
+//            p[x] = (a[x] === 0 ? '\\' : '/');
+//            b[k] = p.join('');
+//
+//            y += a[x] * 2 - 1;
+//        }
+
         String result = Arrays.stream(ch)
                 .map(i -> (""+i))
                 .collect(Collectors.joining(""));
+
         System.out.println(result);
     }
 

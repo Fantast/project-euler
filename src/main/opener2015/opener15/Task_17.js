@@ -22,30 +22,31 @@ function go() {
   var b = [];
   for (var i = 0; i < rr; i++) {
     var ind = random(a.length);
-    a.splice(ind, 0, '(', ')');
+    //a.splice(ind, 0, '(', ')');
+    a.splice(ind, 0, 1, 0);
     b.push(ws);
   }
 
   console.log(a.join(''));
-  //console.log(b.length);
-  //var y = -1;
-  //for (var x = 0; x < rn; x++) {
-  //  var k = rr - 1 - y - a[x];
-  //
-  //  b[k][x] = a[x] === 0 ? '\\' : '/';
-  //
-  //  //var p = b[k].split('');
-  //  //p[x] = (a[x] === 0 ? '\\' : '/');
-  //  //b[k] = p.join('');
-  //
-  //  y += a[x] * 2 - 1;
-  //}
-  //
-  //var res = b.filter(function (s) {
-  //  return s.trim() != '';
-  //}).join('');
-  //
-  //console.log(res);
+  console.log(b.length);
+  var y = -1;
+  for (var x = 0; x < rn; x++) {
+    var k = rr - 1 - y - a[x];
+
+    //b[k][x] = a[x] === 0 ? '\\' : '/';
+
+    var p = b[k].split('');
+    p[x] = (a[x] === 0 ? '\\' : '/');
+    b[k] = p.join('');
+
+    y += a[x] * 2 - 1;
+  }
+
+  var res = b.filter(function (s) {
+    return s.trim() != '';
+  }).join('');
+
+  console.log(res);
 }
 
 go();
