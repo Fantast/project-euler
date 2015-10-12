@@ -11,6 +11,10 @@ public class Point {
         this.y = y;
     }
 
+    public FractionPoint toFractionPoint() {
+        return new FractionPoint(new LongFraction(x), new LongFraction(y));
+    }
+
     @Override
     public int hashCode() {
         return new Long(x + y).hashCode();

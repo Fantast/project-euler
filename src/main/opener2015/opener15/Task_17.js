@@ -12,7 +12,7 @@ function ws(n) {
 
 function go() {
   var rr = random(12) + 1; //1..13
-  var rn = rr << 1;
+  var rn = rr * 2;
   var ws = new Array(rn + 1).join(' ');
 
   console.log(rr);
@@ -46,7 +46,15 @@ function go() {
     return s.trim() != '';
   }).join('');
 
+  console.log('----');
+  b.forEach(function (e) {
+    console.log(e);
+  });
+  console.log('----');
+
   console.log(res);
+  console.log('123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890');
+  console.log('         1         2         3         4         5         6         7         8         9');
 }
 
 go();

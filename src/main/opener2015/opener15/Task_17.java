@@ -4,12 +4,11 @@ import tasks.AbstractTask;
 import tasks.Tester;
 import utils.log.Logger;
 
-import java.util.Arrays;
-import java.util.StringJoiner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.BitSet;
+import java.util.HashSet;
+import java.util.Set;
 
-//Answer :
+//Answer : 1033411
 public class Task_17 extends AbstractTask {
     public static void main(String[] args) {
         Logger.init("default.log");
@@ -17,49 +16,83 @@ public class Task_17 extends AbstractTask {
         Logger.close();
     }
 
+    int res = 0;
+    int max = 13 * 2;
+    boolean up[] = new boolean[100];
+
     public void solving() {
-        int rr = randomInt(13) + 1; //1..13
-        int rr2 = rr*2;
-        int rn = rr << 1;
+        long a[] = new long[] {
+                1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700,
+                1767263190, 6564120420L, 24466267020L, 91482563640L
+        };
 
-        int a[] = new int[rr2];
-        String ch[] = new String[rr2];
-
-        int opened = 0; //..brackets
-        for (int i = 0; i < rr2; i++) {
-            boolean open;
-            if (opened == 0) {
-                open = true;
-            } else if (opened == rr2 - i) {
-                open = false;
-            } else {
-                open = randomBoolean();
-            }
-            a[i] = open ? 1 : 0;
-            ch[i] = open ? "(" : ")";
-            opened += open ? 1 : -1;
+        long res = 0;
+        for (int i = 1; i <= 13; ++i) {
+            res += a[i];
         }
 
-//        for (int x = 0; x < rn; ++x) {
-//            var k = rr - 1 - y - a[x];
-//
-//            //b[k][x] = a[x] === 0 ? '\\' : '/';
-//
-//            var p = b[k].split('');
-//            p[x] = (a[x] === 0 ? '\\' : '/');
-//            b[k] = p.join('');
-//
-//            y += a[x] * 2 - 1;
-//        }
-
-        String result = Arrays.stream(ch)
-                .map(i -> (""+i))
-                .collect(Collectors.joining(""));
-
-        System.out.println(result);
+//        generate(0, 0);
+        System.out.println(res);
     }
 
-    public char[] ws(int n) {
-        return new char[n];
+    private void generate(int elevation, int len) {
+        if (len == max) {
+            return;
+        }
+
+        if (elevation == 0 && len > 1) {
+            res++;
+//            output(len);
+        }
+
+//        if (elevation > 0) {
+//            up[len] = false;
+//            generate(elevation - 1, len + 1);
+//        } else {
+//            up[len] = true;
+//            generate(elevation + 1, len + 1);
+//        }
+//
+//        if (elevation != 0  && elevation < max - len) {
+//            up[len] = true;
+//            generate(elevation + 1, len + 1);
+//        }
+
+        if (elevation == 0) {
+            up[len] = true;
+            generate(elevation + 1, len + 1);
+        } else if (elevation == max - len) {
+            up[len] = false;
+            generate(elevation - 1, len + 1);
+        } else {
+            up[len] = true;
+            generate(elevation + 1, len + 1);
+            up[len] = false;
+            generate(elevation - 1, len + 1);
+        }
+    }
+
+    private void output(int len) {
+        System.out.println("--------------");
+        char a [][] = new char[len][len];
+        int r = len - 1;
+        int mn = 0;
+        for (int i = 0; i < len; ++i) {
+            if (up[i]) {
+                a[r][i] = '/';
+                r--;
+            } else {
+                a[r][i] = '\\';
+                r++;
+            }
+            mn = Math.min(mn, r);
+        }
+
+        for (int y = mn; y < len; y++) {
+            for (int x = 0; x < len; ++x) {
+                System.out.print(a[y][x]);
+            }
+            System.out.println();
+        }
     }
 }

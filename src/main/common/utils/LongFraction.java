@@ -15,6 +15,10 @@ public class LongFraction implements Comparable<LongFraction> {
         return value;
     }
 
+    public LongFraction(long numer) {
+        this(numer, 1);
+    }
+
     public LongFraction(long numer, long denom) {
         // throw Exception if denom==0
         long tmp = numer / denom;
