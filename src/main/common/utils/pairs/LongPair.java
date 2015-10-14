@@ -4,13 +4,16 @@ public class LongPair implements Comparable<LongPair> {
     public long a;
     public long b;
 
+    private final int hashCode;
+
     public LongPair(long a, long b) {
         this.a = a;
         this.b = b;
+        hashCode = new Long(a+b).hashCode();
     }
 
     public int hashCode() {
-        return new Long(a+b).hashCode();
+        return hashCode;
     }
 
     public boolean equals(Object obj) {
