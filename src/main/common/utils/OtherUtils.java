@@ -212,6 +212,14 @@ public class OtherUtils {
         return res;
     }
 
+    public static String padLeft(String s, int n, char ch) {
+        return replicate("" + ch, n - s.length()) + s;
+    }
+
+    public static String padRight(String s, int n, char ch) {
+        return s + replicate("" + ch, n - s.length());
+    }
+
     public static <T> T or(T value, T defaultValue) {
         return value == null ? defaultValue : value;
     }
