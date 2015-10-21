@@ -25,13 +25,19 @@ public class Task_32 extends AbstractTask {
 
     Map<BitSet, Long> ff = new HashMap<>();
 
+    int count = 0;
     long find(BitSet state) {
+        ++count;
+        if (count < 10) {
+            System.out.println("Current: " + count);
+        }
         Long res = ff.get(state);
         if (res == null) {
             BitSet newState = (BitSet) state.clone();
             res = fill(state);
             ff.put(newState, res);
         }
+        --count;
         return res;
     }
 

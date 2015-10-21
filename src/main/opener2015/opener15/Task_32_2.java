@@ -25,11 +25,17 @@ public class Task_32_2 extends AbstractTask {
         return fill(state);
     }
 
+    int count = 0;
     private Long fill(BitSet state) {
         int ind = state.nextClearBit(0);
         if (ind >= 90) {
             System.out.println("Got some...");
             return 1L;
+        }
+
+        ++count;
+        if (count < 8) {
+            System.out.println("Current: " + count);
         }
 
         state.set(ind);
@@ -40,6 +46,8 @@ public class Task_32_2 extends AbstractTask {
         res += go(state, ind, ind, 0, 2) / 2;
 
         state.clear(ind);
+
+        --count;
 
         return res;
     }
