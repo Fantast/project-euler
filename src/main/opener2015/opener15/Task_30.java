@@ -7,12 +7,12 @@ import utils.log.Logger;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.TreeSet;
 
 import static java.math.BigInteger.valueOf;
 import static jodd.util.StringUtil.reverse;
 import static utils.MyMath.*;
+import static utils.OtherUtils.arrayComparator;
 import static utils.OtherUtils.padRight;
 
 //Answer: 20918955604925018282747256506500
@@ -114,21 +114,6 @@ public class Task_30 extends AbstractTask {
     }
 
     public static class Grid {
-        public static final Comparator<int[]> arrayComparator = new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                for (int i = 0; i < o1.length; ++i) {
-                    if (o1[i] < o2[i]) {
-                        return -1;
-                    }
-                    if (o1[i] > o2[i]) {
-                        return 1;
-                    }
-                }
-                return 0;
-            }
-        };
-
         int w;
         int h;
 

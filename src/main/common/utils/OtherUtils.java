@@ -2,8 +2,38 @@ package utils;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class OtherUtils {
+    public static final Comparator<int[]> arrayComparator = new Comparator<int[]>() {
+        @Override
+        public int compare(int[] o1, int[] o2) {
+            for (int i = 0; i < o1.length; ++i) {
+                if (o1[i] < o2[i]) {
+                    return -1;
+                }
+                if (o1[i] > o2[i]) {
+                    return 1;
+                }
+            }
+            return 0;
+        }
+    };
+
+    public static final Comparator<int[][]> array2Comparator = new Comparator<int[][]>() {
+        @Override
+        public int compare(int[][] o1, int[][] o2) {
+
+            for (int i = 0; i < o1.length; ++i) {
+                int cmp = arrayComparator.compare(o1[i], o2[i]);
+                if (cmp != 0) {
+                    return cmp;
+                }
+            }
+            return 0;
+        }
+    };
+
     public static boolean isPalindrom(String s) {
         return new StringBuffer(s).reverse().toString().equals(s);
     }
