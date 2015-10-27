@@ -1,24 +1,21 @@
 package opener15;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.knowm.xchart.Chart;
+import org.knowm.xchart.Series;
+import org.knowm.xchart.SeriesMarker;
+import org.knowm.xchart.SwingWrapper;
 import tasks.AbstractTask;
 import tasks.Tester;
 import utils.log.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.io.File;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
-//Answer :
+//Answer : 52*58*110=331760
 public class Task_35 extends AbstractTask {
     public static void main(String[] args) {
         Logger.init("default.log");
@@ -27,203 +24,192 @@ public class Task_35 extends AbstractTask {
     }
 
     int n = 1017;
-    Expr tx[] = new Expr[n];
-    Expr ty[] = new Expr[n];
-    Expr dx[] = new Expr[n];
-    Expr dy[] = new Expr[n];
 
-    public void solving() throws ParserConfigurationException, IOException, SAXException, TransformerException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(new File("/downloads/task35.html"));
+    double tx[] = new double[n];
+    double ty[] = new double[n];
+    double dx[] = new double[n];
+    double dy[] = new double[n];
+    int kinds[] = new int[n];
+    int SMALL = 0;
+    int BIG = 1;
 
-        Element body = doc.getDocumentElement();
-        NodeList divs = body.getElementsByTagName("div");
-        System.out.println(divs.getLength());
-        for (int i = 0; i < 1; ++i) {
-//        for (int i = 0; i < divs.getLength(); i+=2) {
-            Element div = (Element) divs.item(i);
-            NodeList maths = div.getElementsByTagName("math");
+    int BIGS = 1;
+    int SMALLS = 2;
+    int DIFFS = 3;
+    int SAME = 4;
 
-            tx[i / 2] = createMath((Element) maths.item(0));
-            ty[i / 2] = createMath((Element) maths.item(1));
+    List<Double> x = new ArrayList<>();
+    List<Double> y = new ArrayList<>();
+
+    double tan18 = Math.tan(Math.PI / 10);
+    double tan36 = Math.tan(Math.PI / 5);
+
+    double cos18 = Math.cos(Math.PI / 10);
+    double cos36 = Math.cos(Math.PI / 5);
+
+    double linearScale = 10;
+    double scaleBig = 0.045;
+    double scaleSmall = scaleBig * cos18 / cos36;
+
+    Set<Integer> allAngles = new TreeSet<>();
+
+    public void solving() throws IOException {
+        BufferedReader bfr = new BufferedReader(new FileReader("src/main/opener2015/opener15/Task_35.txt"));
+
+        Arrays.fill(kinds, -1);
+
+        for (int i = 0; i < n; ++i) {
+            tx[i] = Double.parseDouble(bfr.readLine())*linearScale;
+            ty[i] = Double.parseDouble(bfr.readLine())*linearScale;
+            dx[i] = Double.parseDouble(bfr.readLine())*linearScale;
+            dy[i] = Double.parseDouble(bfr.readLine())*linearScale;
         }
-    }
 
-    public List<Element> getChildren(Node element) {
-        Element e = (Element) element;
-        NodeList children = e.getChildNodes();
-        List<Element> result = new ArrayList<>();
-        for (int i = 0; i < children.getLength(); i++) {
-            Node item = children.item(i);
-            if (item instanceof Element) {
-                result.add((Element) item);
+        for (int i = 0; i < n; ++i) {
+
+            int j = (i+n-1)%n;
+            int d = (int) ((tx[i] * tx[i] + ty[i] * ty[i])*100000);
+
+            int angle = angle(dx[i], dy[i], dx[j], dy[j]);
+
+            if (d == 10729) {
+                kinds[i] = kinds[j] = SMALL;
+            } else if (d == 20326) {
+                if (kinds[j] == BIG) {
+                    kinds[i] = SMALL;
+                } else if (kinds[j] == SMALL) {
+                    kinds[i] = BIG;
+                }
+            } else if (d == 28090) {
+                kinds[i] = BIG;
+                if (angle == 72) {
+                    kinds[i] = BIG;
+                } else if (angle == 18) {
+                    if (kinds[j] == BIG) {
+                        kinds[i] = SMALL;
+                    } else if (kinds[j] == SMALL) {
+                        kinds[i] = BIG;
+                    }
+                } else if (angle == 54) {
+                    if (kinds[j] == BIG) {
+                        kinds[i] = SMALL;
+                    } else if (kinds[j] == SMALL) {
+                        kinds[i] = BIG;
+                    }
+                }
             }
         }
-        return result;
-    }
 
-    public Expr createMath(Element math) throws TransformerException {
-        List<Element> children = getChildren(math);
-        assert children.size() == 1;
-        return parseExpr(children.get(0));
-    }
-
-    private RowEl parseRowEl(Element rowEl) {
-        switch (rowEl.getTagName()) {
-            case "mrow":
-                return parseRow(rowEl);
-            case "mfrac":
-                return parseFrac(rowEl);
-            case "mo":
-                return parseOperator(rowEl);
-            case "mn":
-                return parseNumber(rowEl);
-            case "msqrt":
-                return parseSqrt(rowEl);
-            case "mfenced":
-                return parseBraces(rowEl);
-        }
-        throw new IllegalArgumentException("Shouldn't happen");
-    }
-
-    private Expr parseExpr(Element expr) {
-        RowEl rowEl = parseRowEl(expr);
-        return (Expr) rowEl;
-    }
-
-    private Row parseRow(Element rowEl) {
-        assert rowEl.getTagName().equals("mrow");
-        return new Row(parseRowElList(rowEl));
-    }
-
-    private List<RowEl> parseRowElList(Element parent) {
-        List<RowEl> result = new ArrayList<>();
-        for (Element e : getChildren(parent)) {
-            result.add(parseRowEl(e));
-        }
-
-        List<Expr> exprList = new ArrayList<>();
-
-        int curr = 0;
-        if (isMinus(result.get(0))) {
-            Negate negate = new Negate((Expr) result.get(1));
-        }
-
-        for (int i = curr; i < result.size(); ++i) {
-            List<Expr> mult = new ArrayList<>();
-            for (int j = i + 1; j < result.size(); ++i) {
-
-
+        for (int i = 0; i < n; ++i) {
+            if (kinds[i] == -1) {
+                System.out.println("Unknown kind: " + i);
             }
-
         }
 
-        return result;
-    }
+        double currx = 0;
+        double curry = 0;
+        add(currx, curry);
+        for (int i = 0; i < n; ++i) {
+            currx += tx[i];
+            curry += ty[i];
 
-    public boolean isMinus(RowEl el) {
-        return el instanceof Operator && ((Operator) el).text.equals("-");
-    }
+            double pdx = -dy[i];
+            double pdy = dx[i];
+            double kind = kinds[i];
 
-    public boolean isPlus(RowEl el) {
-        return el instanceof Operator && ((Operator) el).text.equals("+");
-    }
+            if (kind != -1) {
+                double scale1;
+                double scale2;
+                if (kind == SMALL) {
+                    scale1 = scaleSmall;
+                    scale2 = scaleSmall * tan18;
+                } else {
+                    scale1 = scaleBig;
+                    scale2 = scaleBig * tan36;
+                }
 
-    public boolean isMult(RowEl el) {
-        return !isMinus(el) && !isPlus(el);
-    }
-
-    private Frac parseFrac(Element frac) {
-        List<Element> children = getChildren(frac);
-        return new Frac(parseExpr(children.get(0)), parseExpr(children.get(1)));
-    }
-
-    private Number parseNumber(Element number) {
-        return new Number(Integer.parseInt(number.getTextContent().trim()));
-    }
-
-    private Operator parseOperator(Element operator) {
-        return new Operator(operator.getTextContent().trim());
-    }
-
-    private Sqrt parseSqrt(Element sqrt) {
-        List<Element> children = getChildren(sqrt);
-        assert children.size() == 1;
-        return new Sqrt(parseExpr(children.get(0)));
-    }
-
-    private Braces parseBraces(Element braces) {
-        return new Braces(parseRowElList(braces));
-    }
-
-    static abstract class RowEl {
-    }
-
-    static abstract class Expr extends RowEl {
-    }
-
-    static class Row extends Expr {
-        List<RowEl> elements;
-
-        public Row(List<RowEl> elements) {
-            this.elements = elements;
-        }
-    }
-
-    static class Frac extends Expr {
-        Expr numer;
-        Expr denom;
-
-        public Frac(Expr numer, Expr denom) {
-            this.numer = numer;
-            this.denom = denom;
-        }
-    }
-
-    static class Operator extends RowEl {
-        String text;
-
-        public Operator(String text) {
-            assert text.equals("+") || text.equals("-") || text.equals("&#x2062;");
-            this.text = text;
-        }
-    }
-
-    static class Negate extends Expr {
-        Expr of;
-
-        public Negate(Expr of) {
-            this.of = of;
-        }
-    }
-
-    static class Number extends Expr {
-        int value;
-
-        public Number(int value) {
-            this.value = value;
+                add(currx, curry);
+                add(currx + dx[i] * scale1, curry + dy[i] * scale1);
+                add(currx + pdx * scale2, curry + pdy * scale2);
+                add(currx, curry);
+                add(currx + pdx * scale2, curry + pdy * scale2);
+                add(currx - dx[i] * scale1, curry - dy[i] * scale1);
+                add(currx, curry);
+                add(currx - dx[i] * scale1, curry - dy[i] * scale1);
+                add(currx - pdx * scale2, curry - pdy * scale2);
+                add(currx, curry);
+                add(currx - pdx * scale2, curry - pdy * scale2);
+                add(currx + dx[i] * scale1, curry + dy[i] * scale1);
+                add(currx, curry);
+            }
         }
 
-        public int getValue() {
-            return value;
-        }
+        createUI();
     }
 
-    static class Braces extends Expr {
-        List<RowEl> elements;
+    private void createUI() {
+        // Create Chart
+        Chart chart = new Chart(1200, 800);
+        chart.getStyleManager().setMarkerSize(3);
+        chart.getStyleManager().setPlotGridLinesVisible(false);
 
-        public Braces(List<RowEl> elements) {
-            this.elements = elements;
-        }
+        Series series = chart.addSeries("path", toa(x), toa(y));
+        series.setMarker(SeriesMarker.CIRCLE);
+        series.setLineStyle(new BasicStroke());
+
+        new SwingWrapper(chart).displayChart();
     }
 
-    static class Sqrt extends Expr {
-        Expr of;
+    public int angle(double x1, double y1, double x2, double y2) {
+        double cosa = (x1*x2 + y1*y2)/linearScale/linearScale;
+        int angle = (int) (Math.acos(cosa)*180/Math.PI);
+        return angleKind(angle);
+    }
 
-        public Sqrt(Expr of) {
-            this.of = of;
+    private int angleKind(int angle) {
+        if (angle < 0) {
+            angle = -angle;
         }
+        if (angle > 90) {
+            angle = 180 - angle;
+        }
+        allAngles.add(angle);
+
+        int angles[] = new int[] {
+                18,
+                36,
+                54,
+                72};
+        int index = Arrays.binarySearch(angles, angle);
+        if (index >= 0) {
+            return angles[index];
+        }
+
+        index = -index-1;
+        if (index == 0) {
+            return angles[index];
+        }
+
+        if (index == angles.length) {
+            return angles[index - 1];
+        }
+
+        int error1 = Math.abs(angle - angles[index - 1]);
+        int error2 = Math.abs(angle - angles[index]);
+
+        return error1 < error2 ? angles[index - 1] : angles[index];
+    }
+
+    public void add(double xd, double yd) {
+        x.add(xd);
+        y.add(yd);
+    }
+
+    public double[] toa(List<Double> lst) {
+        double res[] = new double[lst.size()];
+        for (int i = 0; i < lst.size(); i++) {
+            res[i] = lst.get(i);
+        }
+        return res;
     }
 }
-
