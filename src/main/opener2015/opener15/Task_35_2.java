@@ -51,8 +51,13 @@ public class Task_35_2 extends AbstractTask {
     double scaleBig = 0.045;
     double scaleSmall = scaleBig * cos18 / cos36;
 
+    Set<Integer> allAngles = new TreeSet<>();
+    Set<Integer> allDist = new TreeSet<>();
+
     public void solving() throws IOException {
         BufferedReader bfr = new BufferedReader(new FileReader("src/main/opener2015/opener15/Task_35.txt"));
+
+        Arrays.fill(kinds, -1);
 
         for (int i = 0; i < n; ++i) {
             tx[i] = Double.parseDouble(bfr.readLine())*linearScale;
@@ -61,31 +66,39 @@ public class Task_35_2 extends AbstractTask {
             dy[i] = Double.parseDouble(bfr.readLine())*linearScale;
         }
 
-        Arrays.fill(kinds, -1);
+        System.out.println(allDist);
 
         for (int i = 0; i < n; ++i) {
-            int j = (i+1)%n;
-            int kind = angle(dx[i], dy[i], dx[j], dy[j]);
-            if (kind == BIGS) {
-                kinds[i] = kinds[j] = BIG;
-            } else if (kind == SMALLS) {
+
+            int j = (i+n-1)%n;
+            int d = (int) ((tx[i] * tx[i] + ty[i] * ty[i])*100000);
+
+            int angle = angle(dx[i], dy[i], dx[j], dy[j]);
+
+            if (d == 10729) {
                 kinds[i] = kinds[j] = SMALL;
-            } else if (kind == DIFFS) {
-                //small + big
-                if (kinds[i] == BIG) {
-                    kinds[j] = SMALL;
-                } else if (kinds[i] == SMALL) {
-                    kinds[j] = BIG;
-                } else if (kinds[j] == BIG) {
+            } else if (d == 20326) {
+                if (kinds[j] == BIG) {
                     kinds[i] = SMALL;
                 } else if (kinds[j] == SMALL) {
                     kinds[i] = BIG;
                 }
-            } else if (kind == SAME) {
-                if (kinds[i] != -1) {
-                    kinds[j] = kinds[i];
-                } else if (kinds[j] != -1) {
-                    kinds[i] = kinds[j];
+            } else if (d == 28090) {
+                kinds[i] = BIG;
+                if (angle == 72) {
+                    kinds[i] = BIG;
+                } else if (angle == 18) {
+                    if (kinds[j] == BIG) {
+                        kinds[i] = SMALL;
+                    } else if (kinds[j] == SMALL) {
+                        kinds[i] = BIG;
+                    }
+                } else if (angle == 54) {
+                    if (kinds[j] == BIG) {
+                        kinds[i] = SMALL;
+                    } else if (kinds[j] == SMALL) {
+                        kinds[i] = BIG;
+                    }
                 }
             }
         }
@@ -96,9 +109,6 @@ public class Task_35_2 extends AbstractTask {
             }
         }
 
-//        System.out.println(all);
-//        System.exit(1);
-
         double currx = 0;
         double curry = 0;
         add(currx, curry);
@@ -106,31 +116,41 @@ public class Task_35_2 extends AbstractTask {
             currx += tx[i];
             curry += ty[i];
 
-            add(currx, curry);
-
             double pdx = -dy[i];
             double pdy = dx[i];
             double kind = kinds[i];
 
-            double scale1;
-            double scale2;
-            if (kind == SMALL) {
-                scale1 = scaleSmall;
-                scale2 = scaleSmall * tan18;
-            } else {
-                scale1 = scaleBig;
-                scale2 = scaleBig * tan36;
-            }
+            if (kind != -1) {
+                double scale1;
+                double scale2;
+                if (kind == SMALL) {
+                    scale1 = scaleSmall;
+                    scale2 = scaleSmall * tan18;
+                } else {
+                    scale1 = scaleBig;
+                    scale2 = scaleBig * tan36;
+                }
 
-            add(currx + dx[i] * scale1, curry + dy[i] * scale1);
-            add(currx + pdx * scale2, curry + pdy * scale2);
-            add(currx - dx[i] * scale1, curry - dy[i] * scale1);
-            add(currx - pdx * scale2, curry - pdy * scale2);
-            add(currx + dx[i] * scale1, curry + dy[i] * scale1);
-            add(currx, curry);
+                add(currx, curry);
+                add(currx + dx[i] * scale1, curry + dy[i] * scale1);
+                add(currx + pdx * scale2, curry + pdy * scale2);
+                add(currx, curry);
+                add(currx + pdx * scale2, curry + pdy * scale2);
+                add(currx - dx[i] * scale1, curry - dy[i] * scale1);
+                add(currx, curry);
+                add(currx - dx[i] * scale1, curry - dy[i] * scale1);
+                add(currx - pdx * scale2, curry - pdy * scale2);
+                add(currx, curry);
+                add(currx - pdx * scale2, curry - pdy * scale2);
+                add(currx + dx[i] * scale1, curry + dy[i] * scale1);
+                add(currx, curry);
+            }
         }
 
+        createUI();
+    }
 
+    private void createUI() {
         // Create Chart
         Chart chart = new Chart(1200, 800);
         chart.getStyleManager().setMarkerSize(3);
@@ -144,12 +164,11 @@ public class Task_35_2 extends AbstractTask {
     }
 
     public int angle(double x1, double y1, double x2, double y2) {
-        double cosa = (x1*y1 + x2*y2)/linearScale/linearScale;
+        double cosa = (x1*x2 + y1*y2)/linearScale/linearScale;
         int angle = (int) (Math.acos(cosa)*180/Math.PI);
         return angleKind(angle);
     }
 
-    Set<Integer> all = new TreeSet<>();
     private int angleKind(int angle) {
         if (angle < 0) {
             angle = -angle;
@@ -157,45 +176,31 @@ public class Task_35_2 extends AbstractTask {
         if (angle > 90) {
             angle = 180 - angle;
         }
-        all.add(angle);
+        allAngles.add(angle);
 
-//        int kinds[] = new int[]  {5,  1,  5,  1,  5,  2,  5,  5};
-        int kinds[] = new int[]  {
-                SAME,
-                DIFFS,
-                SMALLS,
-                DIFFS,
-                DIFFS,
-                BIGS,
-                SMALLS,
-                BIGS};
         int angles[] = new int[] {
-                0,
                 18,
-                40,
+                36,
                 54,
-                62,
-                72,
-                80,
-                90};
+                72};
         int index = Arrays.binarySearch(angles, angle);
         if (index >= 0) {
-            return kinds[index];
+            return angles[index];
         }
 
         index = -index-1;
         if (index == 0) {
-            return kinds[index];
+            return angles[index];
         }
 
         if (index == angles.length) {
-            return kinds[index - 1];
+            return angles[index - 1];
         }
 
         int error1 = Math.abs(angle - angles[index - 1]);
         int error2 = Math.abs(angle - angles[index]);
 
-        return error1 < error2 ? kinds[index - 1] : kinds[index];
+        return error1 < error2 ? angles[index - 1] : angles[index];
     }
 
     public void add(double xd, double yd) {
