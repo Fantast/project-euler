@@ -17,6 +17,10 @@ public abstract class AbstractTask implements ITask {
         lastTime = elapsed;
     }
 
+    public static boolean progress10(long progress) {
+        return progress(progress, 10);
+    }
+
     public static boolean progress100(long progress) {
         return progress(progress, 100);
     }
@@ -79,5 +83,21 @@ public abstract class AbstractTask implements ITask {
         double t = a[i];
         a[i] = a[j];
         a[j] = a[i];
+    }
+
+    public static int max(int a, int... others) {
+        int res = a;
+        for (int e : others) {
+            res = Math.max(a, e);
+        }
+        return res;
+    }
+
+    public static long max(long a, long... others) {
+        long res = a;
+        for (long e : others) {
+            res = Math.max(a, e);
+        }
+        return res;
     }
 }
