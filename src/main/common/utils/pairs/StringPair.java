@@ -4,13 +4,16 @@ public class StringPair implements Comparable<StringPair> {
     public String a;
     public String b;
 
+    private final int hashCode;
+
     public StringPair(String a, String b) {
         this.a = a;
         this.b = b;
+        hashCode = (a+b).hashCode();
     }
 
     public int hashCode() {
-        return (a+b).hashCode();
+        return hashCode;
     }
 
     public boolean equals(Object obj) {

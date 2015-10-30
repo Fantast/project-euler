@@ -1,18 +1,21 @@
 package utils.triples;
 
 public class IntTriple implements Comparable<IntTriple> {
-    public int a;
-    public int b;
-    public int c;
+    public final int a;
+    public final int b;
+    public final int c;
+
+    private final int hashCode;
 
     public IntTriple(int a, int b, int c) {
         this.a = a;
         this.b = b;
         this.c = c;
+        hashCode = new Integer(a+b+c).hashCode();
     }
 
     public int hashCode() {
-        return new Integer(a+b+c).hashCode();
+        return hashCode;
     }
 
     public boolean equals(Object obj) {

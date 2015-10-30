@@ -1,18 +1,21 @@
 package utils.triples;
 
 public class LongTriple implements Comparable<LongTriple> {
-    public long a;
-    public long b;
-    public long c;
+    public final long a;
+    public final long b;
+    public final long c;
+
+    private final int hashCode;
 
     public LongTriple(long a, long b, long c) {
         this.a = a;
         this.b = b;
         this.c = c;
+        hashCode = new Long(a+b+c).hashCode();
     }
 
     public int hashCode() {
-        return new Long(a+b+c).hashCode();
+        return hashCode;
     }
 
     public boolean equals(Object obj) {

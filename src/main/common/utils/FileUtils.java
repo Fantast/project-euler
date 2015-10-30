@@ -1,8 +1,6 @@
 package utils;
 
 import java.io.*;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +16,7 @@ public class FileUtils {
                 res.add(line);
                 line = inFile.readLine();
             }
+            inFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

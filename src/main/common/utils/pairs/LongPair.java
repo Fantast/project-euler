@@ -1,8 +1,8 @@
 package utils.pairs;
 
 public class LongPair implements Comparable<LongPair> {
-    public long a;
-    public long b;
+    public final long a;
+    public final long b;
 
     private final int hashCode;
 

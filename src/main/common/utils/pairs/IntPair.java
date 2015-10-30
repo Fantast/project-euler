@@ -1,16 +1,19 @@
 package utils.pairs;
 
 public class IntPair implements Comparable<IntPair> {
-    public int a;
-    public int b;
+    public final int a;
+    public final int b;
+
+    private final int hashCode;
 
     public IntPair(int a, int b) {
         this.a = a;
         this.b = b;
+        hashCode = new Integer(a+b).hashCode();
     }
 
     public int hashCode() {
-        return new Integer(a+b).hashCode();
+        return hashCode;
     }
 
     public boolean equals(Object obj) {

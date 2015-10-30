@@ -1,16 +1,19 @@
 package utils.pairs;
 
 public class LongIntPair implements Comparable<LongIntPair> {
-    public long a;
-    public int b;
+    public final long a;
+    public final int b;
+
+    private final int hashCode;
 
     public LongIntPair(long a, int b) {
         this.a = a;
         this.b = b;
+        hashCode = new Long(a+b).hashCode();
     }
 
     public int hashCode() {
-        return new Long(a+b).hashCode();
+        return hashCode;
     }
 
     public boolean equals(Object obj) {

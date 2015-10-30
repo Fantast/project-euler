@@ -85,6 +85,22 @@ public abstract class AbstractTask implements ITask {
         a[j] = a[i];
     }
 
+    public static int pi(String s) {
+        return Integer.parseInt(s);
+    }
+
+    public static int pi(String s, int radix) {
+        return Integer.parseInt(s, radix);
+    }
+
+    public static long pl(String s) {
+        return Long.parseLong(s);
+    }
+
+    public static long pl(String s, int radix) {
+        return Long.parseLong(s, radix);
+    }
+
     public static int max(int a, int... others) {
         int res = a;
         for (int e : others) {
@@ -97,6 +113,22 @@ public abstract class AbstractTask implements ITask {
         long res = a;
         for (long e : others) {
             res = Math.max(a, e);
+        }
+        return res;
+    }
+
+    public static int min(int a, int... others) {
+        int res = a;
+        for (int e : others) {
+            res = Math.min(a, e);
+        }
+        return res;
+    }
+
+    public static long min(long a, long... others) {
+        long res = a;
+        for (long e : others) {
+            res = Math.min(a, e);
         }
         return res;
     }
