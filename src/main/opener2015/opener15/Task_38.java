@@ -29,8 +29,8 @@ public class Task_38 extends AbstractTask {
     PrintWriter out;
 
     public void solving() throws IOException {
-//        for (String cell : FileUtils.readLines("/downloads/cells.txt")) {
-        for (String cell : FileUtils.readLines("/downloads/task3800/1000.points")) {
+        for (String cell : FileUtils.readLines("/downloads/cells.txt")) {
+//        for (String cell : FileUtils.readLines("/downloads/task3800/1000.points")) {
             cell = cell.replaceAll(" +", "");
             if (cell.isEmpty()) {
                 continue;
@@ -46,13 +46,14 @@ public class Task_38 extends AbstractTask {
             }
         }
 
+        affected.addAll(changed);
+
         for (step = 0; step < steps; ++step) {
 //            out = new PrintWriter(
 //                    new BufferedWriter(
-//                            new FileWriter("/downloads/task38/" + padLeft("" + step, 2, '0') + ".out")));
+//                            new FileWriter("/downloads/task38/" + padLeft("" + step, 4, '0') + ".out")));
             PrintStream out = System.out;
 
-            affected.clear();
             for (Cell cell : changed) {
                 boolean state = cell.state;
                 int dnb = state ? 1 : -1;
@@ -116,10 +117,11 @@ public class Task_38 extends AbstractTask {
                     }
                 }
             }
+            affected.clear();
             out.println(step + " aff.filled : " + affectedFilled);
-            if (step > 3) {
-                findAreas();
-            }
+//            if (step > 3) {
+//                findAreas();
+//            }
 //            out.close();
         }
     }
@@ -130,7 +132,7 @@ public class Task_38 extends AbstractTask {
     private void findAreas() throws IOException {
         PrintWriter cellsOut = new PrintWriter(
                 new BufferedWriter(
-                        new FileWriter("/downloads/task38/" + padLeft("" + step, 2, '0') + ".points")));
+                        new FileWriter("/downloads/task38/" + padLeft("" + step, 4, '0') + ".points")));
 
         out.println("Finding areas: " + all.size());
 
