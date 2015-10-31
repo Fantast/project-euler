@@ -6,20 +6,16 @@ import java.util.List;
 
 public class FileUtils {
 
-    public static ArrayList<String> readLines(String fileName) {
+    public static ArrayList<String> readLines(String fileName) throws IOException {
         ArrayList<String> res = new ArrayList<String>();
-        try {
-            BufferedReader inFile = new BufferedReader(new FileReader(fileName));
+        BufferedReader inFile = new BufferedReader(new FileReader(fileName));
 
-            String line = inFile.readLine();
-            while (line != null) {
-                res.add(line);
-                line = inFile.readLine();
-            }
-            inFile.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        String line = inFile.readLine();
+        while (line != null) {
+            res.add(line);
+            line = inFile.readLine();
         }
+        inFile.close();
         return res;
     }
 

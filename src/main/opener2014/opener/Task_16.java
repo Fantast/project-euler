@@ -5,6 +5,7 @@ import tasks.Tester;
 import utils.FileUtils;
 import utils.log.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,7 +29,7 @@ public class Task_16 implements ITask {
         }
     }
 
-    public void solving() {
+    public void solving() throws IOException {
         //creates the single metric to use - in this case the simple
         // Levenshtein is used, this is far from recomended as much better
         // metrics can be employed in most cases, please see the sourceforge

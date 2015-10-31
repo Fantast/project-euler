@@ -5,6 +5,7 @@ import tasks.Tester;
 import utils.FileUtils;
 import utils.log.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 //Answer : 743
@@ -23,7 +24,7 @@ public class Task_089 implements ITask {
             1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1
     };
 
-    public void solving() {
+    public void solving() throws IOException {
         ArrayList<String> all = FileUtils.readLines("files/roman.txt");
         int oldlen = 0;
         int len = 0;

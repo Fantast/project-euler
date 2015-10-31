@@ -3,10 +3,9 @@ package opener;
 import tasks.ITask;
 import tasks.Tester;
 import utils.FileUtils;
-import utils.MyMath;
 import utils.log.Logger;
 
-import java.math.BigInteger;
+import java.io.IOException;
 import java.util.*;
 
 //Answer :
@@ -22,7 +21,7 @@ public class Task_8 implements ITask {
     Map<String, Integer> all = new HashMap<String, Integer>();
     Map<Integer, Set<Integer>> g = new HashMap<Integer, Set<Integer>>();
 
-    public void solving() {
+    public void solving() throws IOException {
         Arrays.fill(ds, -1);
 
         ArrayList<String> res = FileUtils.readLines("d:\\Downloads\\task.txt");

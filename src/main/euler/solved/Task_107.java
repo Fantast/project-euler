@@ -3,6 +3,7 @@ package solved;
 import tasks.ITask;
 import utils.FileUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static java.lang.Integer.parseInt;
@@ -13,7 +14,7 @@ public class Task_107 implements ITask {
     int a[][];
     private static final int INF = Integer.MAX_VALUE / 5;
 
-    public void solving() {
+    public void solving() throws IOException {
         ArrayList<String> lines = FileUtils.readLines("files/network.txt");
         n = lines.size();
         a = new int[n][n];

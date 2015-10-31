@@ -4,6 +4,7 @@ import tasks.ITask;
 import utils.FileUtils;
 import utils.STLUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,7 +13,7 @@ import static java.lang.Long.parseLong;
 //Answer : 73702
 
 public class Task_105 implements ITask {
-    public void solving() {
+    public void solving() throws IOException {
         long res = 0;
         ArrayList<String> sStr = FileUtils.readLines("files/sets.txt");
         for (String setStr : sStr) {
