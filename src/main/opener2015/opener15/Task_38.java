@@ -5,12 +5,13 @@ import tasks.Tester;
 import utils.FileUtils;
 import utils.log.Logger;
 
-import java.io.*;
+import java.io.IOException;
+import java.math.BigInteger;
 import java.util.*;
 
 import static utils.OtherUtils.padLeft;
 
-//Answer :
+//Answer : -136501880806045292
 public class Task_38 extends AbstractTask {
     public static void main(String[] args) {
         Logger.init("default.log");
@@ -18,41 +19,86 @@ public class Task_38 extends AbstractTask {
         Logger.close();
     }
 
-    int steps = 2 * 128 * 128 * 128 + 128 + 5;
+    int steps = 2 * 128 * 128 * 128 + 128 + 5 - 1;
+    int baseStep = steps - (steps - 400) / 12 * 12;
+
+    int st12 = (steps - baseStep) / 12;
 
     Map<Cell, Cell> all = new HashMap<>();
     Set<Cell> changed = new HashSet<>();
     Set<Cell> affected = new HashSet<>();
+    Map<CellGroup, CellGroup> states = new HashMap<>();
     int current = 0;
 
-    int step;
-    PrintWriter out;
+    List<CellGroup> groups = new ArrayList<>();
 
     public void solving() throws IOException {
-        for (String cell : FileUtils.readLines("/downloads/cells.txt")) {
-//        for (String cell : FileUtils.readLines("/downloads/task3800/1000.points")) {
-            cell = cell.replaceAll(" +", "");
+        for (String cell : FileUtils.readLines("/downloads/task3800/" + padLeft("" + baseStep, 4, '0') + ".points")) {
             if (cell.isEmpty()) {
+                if (all.size() == 0) {
+                    System.out.println("Shouldn't happen");
+                }
+                groups.add(runGroup());
+                progress(groups.size());
                 continue;
             }
+            cell = cell.replaceAll(" +", "");
+
+            assert !cell.isEmpty();
+
             String[] sp = cell.substring(1, cell.length() - 1).split(",");
 
             Cell c = new Cell(pi(sp[0]), pi(sp[1]), pi(sp[2]), pi(sp[3]));
-            c.invert();
+            c.state = true;
 
             if (!changed.contains(c)) {
                 changed.add(c);
+                affected.add(c);
                 all.put(c, c);
             }
         }
 
-        affected.addAll(changed);
+        assert all.size() == 0;
 
-        for (step = 0; step < steps; ++step) {
-//            out = new PrintWriter(
-//                    new BufferedWriter(
-//                            new FileWriter("/downloads/task38/" + padLeft("" + step, 4, '0') + ".out")));
-            PrintStream out = System.out;
+        BigInteger res = BigInteger.ZERO;
+        for (CellGroup group : groups) {
+            for (Cell c : group.translate((12 / group.cycle) * st12)) {
+                res = res.add(c.value());
+            }
+        }
+        System.out.println(res);
+    }
+
+    private CellGroup runGroup() throws IOException {
+//        System.out.print(all.size() + ": ");
+
+        int steps = -1;
+        CellGroup res;
+        while (true) {
+            ++steps;
+            List<Cell> stateCells = new ArrayList<>();
+            for (Cell c : all.keySet()) {
+                if (c.state) {
+                    stateCells.add(c);
+                }
+            }
+
+            CellGroup cg = CellGroup.normalize(stateCells);
+            CellGroup ex = states.get(cg);
+            if (ex != null) {
+                ex.setd(cg.ma - ex.ma, cg.mb - ex.mb, cg.mc - ex.mc, cg.md - ex.md);
+                ex.cycle = steps;
+
+//                System.out.println(steps + " steps");
+//                System.out.println(new Cell(ex.ma, ex.mb, ex.mc, ex.md));
+//                System.out.println(new Cell(cg.ma, cg.mb, cg.mc, cg.md));
+//                System.out.println(new Cell(ex.da, ex.db, ex.dc, ex.dd));
+//                System.out.println();
+
+                res = ex;
+                break;
+            }
+            states.put(cg, cg);
 
             for (Cell cell : changed) {
                 boolean state = cell.state;
@@ -85,17 +131,9 @@ public class Task_38 extends AbstractTask {
                 current += dnb;
             }
 
-            out.println();
-            out.println(step + " changed   : " + changed.size());
-            out.println(step + " affected  : " + affected.size());
-            out.println(step + " all.size(): " + all.size());
-            out.println(step + " current   : " + current);
-
             changed.clear();
-            int affectedFilled = 0;
             for (Cell cell : affected) {
                 if (cell.state) {
-                    affectedFilled++;
                     if (cell.nbCount < 9 || cell.nbCount > 11) {
                         cell.invert();
                         changed.add(cell);
@@ -118,72 +156,103 @@ public class Task_38 extends AbstractTask {
                 }
             }
             affected.clear();
-            out.println(step + " aff.filled : " + affectedFilled);
-//            if (step > 3) {
-//                findAreas();
-//            }
-//            out.close();
+        }
+
+        current = 0;
+        all.clear();
+        states.clear();
+        changed.clear();
+        affected.clear();
+
+        return res;
+    }
+
+    public static class CellGroup {
+        final Set<Cell> cells;
+        final int hashCode;
+        final int m[] = new int[4];
+        final int d[] = new int[4];
+        final int ma;
+        final int mb;
+        final int mc;
+        final int md;
+
+        int da;
+        int db;
+        int dc;
+        int dd;
+        int cycle;
+
+        public CellGroup(Set<Cell> newCells, int ma, int mb, int mc, int md) {
+            cells = newCells;
+            m[0] = ma;
+            m[1] = mb;
+            m[2] = mc;
+            m[3] = md;
+            this.ma = ma;
+            this.mb = mb;
+            this.mc = mc;
+            this.md = md;
+            hashCode = cells.hashCode();
+        }
+
+        public void setd(int da, int db, int dc, int dd) {
+            d[0] = da;
+            d[1] = db;
+            d[2] = dc;
+            d[3] = dd;
+            this.da = da;
+            this.db = db;
+            this.dc = dc;
+            this.dd = dd;
+        }
+
+        public int size() {
+            return cells.size();
+        }
+
+        public Set<Cell> translate(int cycles) {
+            Set<Cell> newCells = new HashSet<>();
+            for (Cell c : cells) {
+                newCells.add(
+                        c.translate(ma + da * cycles, mb + db * cycles, mc + dc * cycles, md + dd * cycles)
+                );
+            }
+            return newCells;
+        }
+
+        public static CellGroup normalize(List<Cell> cells) {
+            int mina, minb, minc, mind;
+            mina = minb = minc = mind = 100000;
+
+            Set<Cell> newCells = new HashSet<>();
+
+            for (Cell c : cells) {
+                mina = min(mina, c.a);
+                minb = min(minb, c.b);
+                minc = min(minc, c.c);
+                mind = min(mind, c.d);
+            }
+
+            for (Cell c : cells) {
+                newCells.add(new Cell(c.a - mina, c.b - minb, c.c - minc, c.d - mind));
+            }
+            return new CellGroup(newCells, mina, minb, minc, mind);
+        }
+
+        @Override
+        public int hashCode() {
+            return hashCode;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            CellGroup cellGroup = (CellGroup) o;
+            return cells.equals(cellGroup.cells);
         }
     }
 
-    HashMap<Cell, Cell> all2 = new HashMap<>();
-    Queue<Cell> q = new LinkedList<>();
-
-    private void findAreas() throws IOException {
-        PrintWriter cellsOut = new PrintWriter(
-                new BufferedWriter(
-                        new FileWriter("/downloads/task38/" + padLeft("" + step, 4, '0') + ".points")));
-
-        out.println("Finding areas: " + all.size());
-
-        all2.putAll(all);
-        int areaCount = 0;
-        while (!all2.isEmpty()) {
-            Cell rootCell = null;
-            Set<Cell> entries = all2.keySet();
-            for (Iterator<Cell> iterator = entries.iterator(); iterator.hasNext(); ) {
-                Cell c = iterator.next();
-                iterator.remove();
-                if (c.state) {
-                    rootCell = c;
-                    break;
-                }
-            }
-
-            if (rootCell != null) {
-                ++areaCount;
-                q.add(rootCell);
-
-                int cellCount = 0;
-                while (!q.isEmpty()) {
-                    Cell cell = q.poll();
-                    cellCount++;
-                    cellsOut.println(cell);
-
-                    for (int a = -2; a < 3; ++a) {
-                        for (int b = -2; b < 3; ++b) {
-                            for (int c = -2; c < 3; ++c) {
-                                for (int d = -2; d < 3; ++d) {
-                                    Cell nbCell = new Cell(cell.a + a, cell.b + b, cell.c + c, cell.d + d);
-                                    nbCell = all2.remove(nbCell);
-                                    if (nbCell != null && nbCell.state) {
-                                        q.add(nbCell);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                out.println("   new area around cell: " + rootCell + ":" + rootCell.nbCount + " : " + cellCount);
-                cellsOut.println();
-            }
-        }
-
-        out.printf(" total areas: " + areaCount);
-        cellsOut.close();
-    }
-
-    public class Cell implements Comparable<Cell> {
+    public static class Cell implements Comparable<Cell> {
         public final int a;
         public final int b;
         public final int c;
@@ -204,6 +273,14 @@ public class Task_38 extends AbstractTask {
 
         public void invert() {
             state = !state;
+        }
+
+        public BigInteger value() {
+            return bi(a).multiply(bi(b)).multiply(bi(c)).multiply(bi(d));
+        }
+
+        public Cell translate(int da, int db, int dc, int dd) {
+            return new Cell(a + da, b + db, c + dc, d + dd);
         }
 
         public int hashCode() {

@@ -1,5 +1,6 @@
 package tasks;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 public abstract class AbstractTask implements ITask {
@@ -83,6 +84,22 @@ public abstract class AbstractTask implements ITask {
         double t = a[i];
         a[i] = a[j];
         a[j] = a[i];
+    }
+
+    public static BigInteger bi(int n) {
+        return BigInteger.valueOf(n);
+    }
+
+    public static BigInteger bi(long n) {
+        return BigInteger.valueOf(n);
+    }
+
+    public static BigInteger bi(String s) {
+        return new BigInteger(s);
+    }
+
+    public static BigInteger bi(String s, int radix) {
+        return new BigInteger(s, radix);
     }
 
     public static int pi(String s) {
