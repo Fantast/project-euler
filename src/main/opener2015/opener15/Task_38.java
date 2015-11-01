@@ -33,7 +33,7 @@ public class Task_38 extends AbstractTask {
     List<CellGroup> groups = new ArrayList<>();
 
     public void solving() throws IOException {
-        for (String cell : FileUtils.readLines("/downloads/task3800/" + padLeft("" + baseStep, 4, '0') + ".points")) {
+        for (String cell : FileUtils.readLines("/downloads/task38/" + padLeft("" + baseStep, 4, '0') + ".points")) {
             if (cell.isEmpty()) {
                 if (all.size() == 0) {
                     System.out.println("Shouldn't happen");

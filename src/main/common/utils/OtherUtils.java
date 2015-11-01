@@ -3,8 +3,12 @@ package utils;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Random;
 
 public class OtherUtils {
+
+    public static Random random = new Random();
+
     public static final Comparator<int[]> arrayComparator = new Comparator<int[]>() {
         @Override
         public int compare(int[] o1, int[] o2) {
@@ -252,5 +256,16 @@ public class OtherUtils {
 
     public static <T> T or(T value, T defaultValue) {
         return value == null ? defaultValue : value;
+    }
+
+    // Implementing Fisher–Yates shuffle
+    public static void shuffle(int[] ar) {
+        for (int i = ar.length - 1; i > 0; i--) {
+            int index = random.nextInt(i + 1);
+            // Simple swap
+            int a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
     }
 }

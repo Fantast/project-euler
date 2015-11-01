@@ -118,6 +118,18 @@ public abstract class AbstractTask implements ITask {
         return Long.parseLong(s, radix);
     }
 
+    public static int abs(int a) {
+        return a >= 0 ? a : -a;
+    }
+
+    public static long abs(long a) {
+        return a >= 0 ? a : -a;
+    }
+
+    public static double abs(double a) {
+        return a >= 0 ? a : -a;
+    }
+
     public static int max(int a, int... others) {
         int res = a;
         for (int e : others) {
