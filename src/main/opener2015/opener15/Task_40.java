@@ -30,7 +30,7 @@ public class Task_40 extends AbstractTask {
         }
 
         int p = 0;
-        for (int i = 0; i < 100; ++i) {
+        while (true) {
             int a = get(p);
             int b = get(p+1);
             int c = get(p+2);
@@ -45,7 +45,6 @@ public class Task_40 extends AbstractTask {
             } else {
                 p += 3;
             }
-
 
             if (p == goal) {
                 break;
