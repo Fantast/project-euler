@@ -4,6 +4,10 @@ import tasks.AbstractTask;
 import tasks.Tester;
 import utils.log.Logger;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,27 +28,44 @@ public class Task_40 extends AbstractTask {
 
     int goal = 1839;
 
-    public void solving() {
+    private PrintWriter out;
+
+    public void solving() throws IOException {
+        System.out.println(mem.length);
+        out = new PrintWriter(
+                new BufferedWriter(
+                        new FileWriter("/downloads/task40.out")));
+
         for (int i = 0; i < mem.length; i++) {
             memory.put(i, mem[i]);
+            if (i%3 == 2 && mem[i]%3 != 0) {
+                System.out.println("Sad... " + i + " = " + mem[i]);
+            }
         }
 
         int p = 0;
         while (true) {
+//            if (p%3 != 0) {
+//                System.out.println("hm... " + p);
+//            }
             int a = get(p);
             int b = get(p+1);
             int c = get(p+2);
 
             int av = get(a);
             int bv = get(b);
-            int d = av - bv;
+            int d = bv - av;
             set(b, d);
+
+            out.print(String.format("%4d - a: %5d, b: %5d, c: %5d, av: %5d, bv: %5d, av-bv=%5d -> ", p, a, b, c, av, bv, d));
 
             if (d <= 0) {
                 p = c;
             } else {
                 p += 3;
             }
+
+            out.println(String.format("%5d", p));
 
             if (p == goal) {
                 break;
@@ -62,6 +83,11 @@ public class Task_40 extends AbstractTask {
     }
 
     public void set(int p, int v) {
+        if (p%3==2) {
+            if (p >= 1398 && p <= 1560 && v != p+1) {
+                System.out.println("Reprogramming ((: " + p + " -> " + v);
+            }
+        }
         memory.put(p, v);
     }
 }
