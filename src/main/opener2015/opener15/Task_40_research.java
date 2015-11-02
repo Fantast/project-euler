@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 //Answer :
-public class Task_40_0 extends AbstractTask {
+public class Task_40_research extends AbstractTask {
 
     public static void main(String[] args) {
         Logger.init("default.log");
-        Tester.test(new Task_40_0());
+        Tester.test(new Task_40_research());
         Logger.close();
     }
 
