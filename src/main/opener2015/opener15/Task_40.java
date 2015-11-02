@@ -30,24 +30,72 @@ public class Task_40 extends AbstractTask {
 
     private PrintWriter out;
 
+    int p = 0;
+
     public void solving() throws IOException {
         System.out.println(mem.length);
         out = new PrintWriter(
                 new BufferedWriter(
                         new FileWriter("/downloads/task40.out")));
 
+//        for (int i = 0; i < mem.length; i+=3) {
+//            int a = mem[i];
+//            int b = mem[i+1];
+//            int c = mem[i+2];
+//            System.out.print(String.format("%5d%5d%5d", a, b, c));
+//            if (a == b) {
+//                System.out.println(String.format("     m%-5d= 0", a));
+//            } else {
+//                System.out.println();
+//            }
+//
+//        }
+
         for (int i = 0; i < mem.length; i++) {
             memory.put(i, mem[i]);
-            if (i%3 == 2 && mem[i]%3 != 0) {
-                System.out.println("Sad... " + i + " = " + mem[i]);
-            }
         }
 
-        int p = 0;
         while (true) {
-//            if (p%3 != 0) {
-//                System.out.println("hm... " + p);
-//            }
+            if (p == 378) {
+//                f378();
+//                continue;
+                System.out.println(378);
+            }
+            if (p == 1269) {
+//                f1269();
+//                continue;
+                System.out.println(1269);
+            }
+            if (p == 1296) {
+//                f1296();
+//                continue;
+                System.out.println(1296);
+            }
+            if (p == 684) {
+//                f684();
+//                continue;
+                System.out.println(684);
+            }
+            if (p == 1002) {
+//                f1002();
+//                continue;
+                System.out.println(1002);
+            }
+            if (p == 162) {
+//                f162();
+//                continue;
+                System.out.println(162);
+            }
+            if (p == 1563) {
+//                f162();
+//                continue;
+                System.out.println(1563);
+            }
+            if (p == 1710) {
+//                f162();
+//                continue;
+                System.out.println(1710);
+            }
             int a = get(p);
             int b = get(p+1);
             int c = get(p+2);
@@ -57,21 +105,124 @@ public class Task_40 extends AbstractTask {
             int d = bv - av;
             set(b, d);
 
-            out.print(String.format("%4d - a: %5d, b: %5d, c: %5d, av: %5d, bv: %5d, av-bv=%5d -> ", p, a, b, c, av, bv, d));
+//            out.print(String.format("%4d - a: %5d, b: %5d, c: %5d, av: %5d, bv: %5d, av-bv=%5d -> ", p, a, b, c, av, bv, d));
+//            out.print(String.format("%5d%5d%5d     m%-7d= m%d - m%d = %d", a, b, c, b, b, a, d));
+            out.print(String.format("%5d%5d%5d     m%-7d= m%d - m%d = %d", mem[p], mem[p+1], mem[p+2], b, b, a, d));
 
-            if (d <= 0) {
+            if (d <= 0 && c != p+3) {
                 p = c;
+                out.println(String.format("   -> %d", p));
             } else {
-                p += 3;
+                p = p+3;
+                out.println();
             }
 
-            out.println(String.format("%5d", p));
 
             if (p == goal) {
                 break;
             }
         }
         System.out.println(get(p));
+    }
+
+    private void f684() {
+        int m7 = get(7);
+        int mm7 = get(m7 - 2);
+
+        set(m7 - 1, 0);
+        set(m7, 1002);
+        set(m7 + 1, mm7 - 1);
+
+        set(7, m7+2);
+
+        p = 378;
+    }
+
+    private void f378() {
+        p = 1296;
+
+        int m7 = get(7);
+        int mm7 = get(m7 - 1);
+        int m565 = get(565); //allways 684 ?
+        if (m565 != 684) {
+            System.out.println("f378: m565 != 684: " + m565);
+        }
+
+        if (mm7 == 0) {
+            set(421, 1);
+            return;
+        }
+
+        set(421, 0);
+
+        for (int i = mm7 - 1; i >= 1; i--) {
+            set(m7, m565);
+            set(m7 - 1, i);
+            m7 += 2;
+        }
+        m7--;
+        set(m7, 1);
+        set(7, m7);
+    }
+
+    private void f1269() {
+        int m7 = get(7);
+        int mm7 = get(m7 - 1);
+
+        set(7, m7 - 1);
+        set(421, mm7);
+
+        f1296();
+    }
+
+    private void f1296() {
+        int m7 = get(7);
+        int mm7 = get(m7 - 1);
+        int m421 = get(421);
+
+        set(m7 - 1, m421);
+        set(1397, mm7);
+
+        p = mm7;
+    }
+
+    private void f1002() {
+//        0    0 1140     m[m7` - 3] = 1269 = m1093
+//        0    0 1197     m[m7` - 2] = m[m7` - 3]` = 1
+//        0    0 1254     m[m7` - 1] = m[m7` - 2]` + m[m7` - 1]` = 1
+
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+        int mm2 = get(m7 - 2);
+        int mm3 = get(m7 - 3);
+
+        set(m7 - 3, 1269);
+        set(m7 - 2, mm3);
+        set(m7 - 1, mm2 + mm1);
+
+        p = 162;
+    }
+
+    private void f162() {
+//        0    0  363     m[m7` - 3] = m[m7` - 2] = 1
+//        0    7  372     m7      = m7` - 2 = 1855
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+        int mm2 = get(m7 - 2);
+
+        int m235 = 0;
+        if (mm1 != 0) {
+            m235 = mm2;
+        }
+
+//        0  277  303     m277    = m[m7` - 3] = 1269
+//        0  377  315     m377    = m[m7` - 3] = 1269
+
+
+        set(m7 - 3, m235);
+        set(7, m7 - 2);
+
+        p = 1269;
     }
 
     public int get(int p) {
@@ -83,6 +234,12 @@ public class Task_40 extends AbstractTask {
     }
 
     public void set(int p, int v) {
+        if  (p == 565 && v != 684) {
+            System.out.println("Ouch 565");
+        }
+        if  (p == 1093 && v != 1269) {
+            System.out.println("Ouch 1093");
+        }
         if (p%3==2) {
             if (p >= 1398 && p <= 1560 && v != p+1) {
                 System.out.println("Reprogramming ((: " + p + " -> " + v);
