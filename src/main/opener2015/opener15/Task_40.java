@@ -57,44 +57,47 @@ public class Task_40 extends AbstractTask {
 
         while (true) {
             if (p == 378) {
-//                f378();
-//                continue;
                 System.out.println(378);
+                f378();
+                continue;
             }
             if (p == 1269) {
-//                f1269();
-//                continue;
                 System.out.println(1269);
+                f1269();
+                continue;
             }
             if (p == 1296) {
-//                f1296();
-//                continue;
                 System.out.println(1296);
+                f1296();
+                continue;
             }
             if (p == 684) {
-//                f684();
-//                continue;
+                if (get(0) != 0) {
+                    System.out.println("684: ouch get(0) != 0");
+                }
                 System.out.println(684);
+                f684();
+                continue;
             }
             if (p == 1002) {
-//                f1002();
-//                continue;
                 System.out.println(1002);
+                f1002();
+                continue;
             }
             if (p == 162) {
+                System.out.println(162);
 //                f162();
 //                continue;
-                System.out.println(162);
             }
             if (p == 1563) {
+                System.out.println(1563);
 //                f162();
 //                continue;
-                System.out.println(1563);
             }
             if (p == 1710) {
+                System.out.println(1710);
 //                f162();
 //                continue;
-                System.out.println(1710);
             }
             int a = get(p);
             int b = get(p+1);
@@ -126,43 +129,82 @@ public class Task_40 extends AbstractTask {
     }
 
     private void f684() {
-        int m7 = get(7);
-        int mm7 = get(m7 - 2);
+//        0    0  930     m[m7`]  = m883 = 1002
+//        0    0  987     m[m7` + 1] = m751 = m[m7` - 2] - 1 = 0
+//        0    7  996     m7      = m7` + 2 = 1858
 
-        set(m7 - 1, 0);
+        int m7 = get(7);
+        int mm2 = get(m7 - 2);
+
+//        set(m7 - 1, 0);
         set(m7, 1002);
-        set(m7 + 1, mm7 - 1);
+        set(m7 + 1, mm2 - 1);
 
         set(7, m7+2);
 
         p = 378;
     }
 
-    private void f378() {
-        p = 1296;
-
+    private void f378_0() {
         int m7 = get(7);
-        int mm7 = get(m7 - 1);
-        int m565 = get(565); //allways 684 ?
-        if (m565 != 684) {
-            System.out.println("f378: m565 != 684: " + m565);
-        }
+        int mm1 = get(m7 - 1);
 
-        if (mm7 == 0) {
+        if (mm1 == 0) {
+            p = 1296;
             set(421, 1);
             return;
         }
 
         set(421, 0);
 
-        for (int i = mm7 - 1; i >= 1; i--) {
-            set(m7, m565);
+        if (mm1 == 1) {
+            p = 1296;
+            return;
+        }
+
+
+
+        for (int i = mm1 - 1; i >= 1; i--) {
+            set(m7, 684);
             set(m7 - 1, i);
             m7 += 2;
         }
         m7--;
         set(m7, 1);
         set(7, m7);
+
+        p = 1296;
+    }
+
+    private void f378() {
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+
+        if (mm1 == 0) {
+            p = 1296;
+            set(421, 1);
+            return;
+        }
+
+        set(421, 0);
+
+        if (mm1 == 1) {
+            p = 1296;
+            return;
+        }
+
+//        0    0  552     m[m7` - 1] = m[m7` - 1] - 1;
+//        0    0  612     m[m7`]   = m565 = 684
+//        0    0  669     m[m7` + 1] = m[m7` - 1] - 1 = 6
+//        0    7  678     m7      = m7` + 2 = 1847
+//        0    0  378     m0      = 0   -> 378
+
+        set(m7 - 1, mm1 - 1);
+        set(m7, 684);
+        set(m7 + 1, mm1 - 1);
+        set(7, m7 + 2);
+
+        p = 378;
     }
 
     private void f1269() {
