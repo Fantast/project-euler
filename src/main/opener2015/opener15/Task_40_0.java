@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 //Answer :
-public class Task_40 extends AbstractTask {
+public class Task_40_0 extends AbstractTask {
 
     public static void main(String[] args) {
         Logger.init("default.log");
-        Tester.test(new Task_40());
+        Tester.test(new Task_40_0());
         Logger.close();
     }
 
@@ -30,21 +30,105 @@ public class Task_40 extends AbstractTask {
 
     private PrintWriter out;
 
+    int p = 0;
+
     public void solving() throws IOException {
         out = new PrintWriter(
                 new BufferedWriter(
                         new FileWriter("/downloads/task40.out")));
 
+//        for (int i = 0; i < mem.length; i+=3) {
+//            int a = mem[i];
+//            int b = mem[i+1];
+//            int c = mem[i+2];
+//            System.out.print(String.format("%5d%5d%5d", a, b, c));
+//            if (a == b) {
+//                System.out.println(String.format("     m%-5d= 0", a));
+//            } else {
+//                System.out.println();
+//            }
+//
+//        }
+
         for (int i = 0; i < mem.length; i++) {
             memory.put(i, mem[i]);
         }
 
-        start();
+        while (true) {
+            if (p == 1398) {
+                f1398();
+                continue;
+            }
+            if (p == 378) {
+                f378();
+                continue;
+            }
+            if (p == 1269) {
+                f1269();
+                continue;
+            }
+            if (p == 1296) {
+                f1296();
+                continue;
+            }
+            if (p == 684) {
+                f684();
+                continue;
+            }
+            if (p == 1002) {
+                f1002();
+                continue;
+            }
+            if (p == 162) {
+                f162();
+                continue;
+            }
+            if (p == 1563) {
+                System.out.println(1563);
+                f1563();
+                continue;
+            }
+            if (p == 1710) {
+                System.out.println(1710);
+//                f1710();
+//                continue;
+            }
+            if (p > 129) {
+                System.out.println("Brutforce: " + p);
+            }
+
+            int a = get(p);
+            int b = get(p+1);
+            int c = get(p+2);
+
+            int av = get(a);
+            int bv = get(b);
+            int d = bv - av;
+            set(b, d);
+
+//            out.print(String.format("%4d - a: %5d, b: %5d, c: %5d, av: %5d, bv: %5d, av-bv=%5d -> ", p, a, b, c, av, bv, d));
+//            out.print(String.format("%5d%5d%5d     m%-7d= m%d - m%d = %d", a, b, c, b, b, a, d));
+            out.print(String.format("%5d%5d%5d     m%-7d= m%d - m%d = %d", mem[p], mem[p+1], mem[p+2], b, b, a, d));
+
+            if (d <= 0 && c != p+3) {
+                p = c;
+                out.println(String.format("   -> %d", p));
+            } else {
+                p = p+3;
+                out.println();
+            }
+
+
+            if (p == goal) {
+                break;
+            }
+        }
+        System.out.println(get(p));
     }
 
     private void debug(int addr) {
         System.out.println(addr);
-        dump(addr);
+
     }
 
     //Main
@@ -55,15 +139,25 @@ public class Task_40 extends AbstractTask {
     // push 7
     // goto 378
 
-    private void start() {
-        set(7, 1842);
-        push(132);
-        push(1563);
-        push(20);
-        call(378);
+    /** A = pop
+    // push 1563
+    // push A
+    // goto 378
+    //[.. A] => [.. 1563 A] && goto 378
+    **/
+    private void f1398() {
+        debug(1398);
+
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+
+        set(m7 - 1, 1563);
+        set(m7, mm1);
+        set(7, m7 + 1);
+
+        f378();
     }
 
-    int depth = 0;
     private void f378() {
         debug(378);
 
@@ -73,22 +167,20 @@ public class Task_40 extends AbstractTask {
             push(684);
         }
 
-        int addr = pop();
-        push(1 - x);
-
-        ++depth;
-        call(addr);
-        --depth;
+        set(421, 1 - x);
+        f1296();
     }
 
-    private void dump(int source) {
+    public int pop() {
+        int m7 = get(7) - 1;
+        set(7, m7);
+        return get(m7);
+    }
+
+    public void push(int value) {
         int m7 = get(7);
-        out.print(String.format("%5d: ", source));
-        for (int i= 1842; i < m7; ++i) {
-            out.print(get(i) + " ");
-        }
-        out.println();
-        out.flush();
+        set(m7, value);
+        set(7, m7 + 1);
     }
 
     // A = pop (->493)
@@ -104,11 +196,14 @@ public class Task_40 extends AbstractTask {
         debug(684);
 
         int m7 = get(7);
-        int b = get(m7 - 2);
+        int mm2 = get(m7 - 2);
 
-        push(1002);
-        push(b - 1);
+        set(m7, 1002);
+        set(m7 + 1, mm2 - 1);
 
+        set(7, m7+2);
+
+//        p = 378;
         f378();
     }
 
@@ -116,25 +211,55 @@ public class Task_40 extends AbstractTask {
     // push 1710
     // push A
     // goto 378
-    //[.. A] => [.. 1710 A] && goto 378
+    //[.. A] => [.. A 1710] && goto 378
     private void f1563() {
         debug(1563);
 
-        int a = pop();
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
 
-        push(1710);
-        push(a);
+        set(m7 - 1, 1710);
+        set(m7, mm1);
+        set(7, m7 + 1);
 
         f378();
-//
-//        int m7 = get(7);
-//        int mm1 = get(m7 - 1);
-//
-//        set(m7 - 1, 1710);
-//        set(m7, mm1);
-//        set(7, m7 + 1);
-//
-//        f378();
+    }
+
+    // X = pop
+    // ADDR = pop
+    // push X
+    // goto ADDR
+    // [.. ADDR X] => [... X]  && goto ADDR
+    private void f1269() {
+        debug(1269);
+
+        int x = pop();
+        int addr = pop();
+        push(x);
+
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+
+        set(7, m7 - 1);
+        set(421, mm1);
+
+        f1296();
+    }
+
+    // X = pop
+    // push m[421]
+    // goto X
+    private void f1296() {
+        debug(1296);
+
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+        int m421 = get(421);
+
+        set(m7 - 1, m421);
+//        set(1397, mm1);
+
+        p = mm1;
     }
 
     // A = pop
@@ -148,51 +273,43 @@ public class Task_40 extends AbstractTask {
     private void f1002() {
         debug(1002);
 
-        int a = pop();
-        int b = pop();
-        int c = pop();
-        int addr = pop();
-
-        push((a + b) * c);
-
-        call(addr);
-    }
-
-    private void call(int addr) {
-        if (addr == 378) {
-            f378();
-        } else if (addr == 1002) {
-            f1002();
-        } else if (addr == 684) {
-            f684();
-        } else if (addr == 1563) {
-            f1563();
-        } else if (addr == 1710) {
-            f1710();
-        } else if (addr == 132) {
-            f132();
-        } else {
-            throw new IllegalStateException("Unknown function: " + addr);
-        }
-    }
-
-    public void f1710() {
-    }
-
-    private void f132() {
-        System.out.println("Result: " + pop());
-    }
-
-    public int pop() {
-        int m7 = get(7) - 1;
-        set(7, m7);
-        return get(m7);
-    }
-
-    public void push(int value) {
         int m7 = get(7);
-        set(m7, value);
-        set(7, m7 + 1);
+        int mm1 = get(m7 - 1);
+        int mm2 = get(m7 - 2);
+        int mm3 = get(m7 - 3);
+
+        set(m7 - 3, 1269);
+        set(m7 - 2, mm3);
+        set(m7 - 1, mm2 + mm1);
+
+        f162();
+    }
+
+    // A = pop
+    // B = pop
+    // C = pop // assert c===1269
+    // ADDR = pop
+    // D = A*B
+    // push D
+    // goto ADDR
+    //[... ADDR 1269 B A] => [.. (A*B)] && goto ADDR
+    private void f162() {
+        debug(162);
+
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+        int mm2 = get(m7 - 2);
+        int mm3 = get(m7 - 3);
+
+        int m235 = mm1 * mm2;
+
+        set(277, mm3);
+        set(377, mm3);
+
+        set(m7 - 3, m235);
+        set(7, m7 - 2);
+
+        f1269();
     }
 
     public int get(int p) {

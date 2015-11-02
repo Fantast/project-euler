@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 //Answer :
-public class Task_40 extends AbstractTask {
+public class Task_40_2 extends AbstractTask {
 
     public static void main(String[] args) {
         Logger.init("default.log");
-        Tester.test(new Task_40());
+        Tester.test(new Task_40_2());
         Logger.close();
     }
 
@@ -30,169 +30,223 @@ public class Task_40 extends AbstractTask {
 
     private PrintWriter out;
 
+    int p = 0;
+
     public void solving() throws IOException {
+        System.out.println(mem.length);
         out = new PrintWriter(
                 new BufferedWriter(
                         new FileWriter("/downloads/task40.out")));
+
+//        for (int i = 0; i < mem.length; i+=3) {
+//            int a = mem[i];
+//            int b = mem[i+1];
+//            int c = mem[i+2];
+//            System.out.print(String.format("%5d%5d%5d", a, b, c));
+//            if (a == b) {
+//                System.out.println(String.format("     m%-5d= 0", a));
+//            } else {
+//                System.out.println();
+//            }
+//
+//        }
 
         for (int i = 0; i < mem.length; i++) {
             memory.put(i, mem[i]);
         }
 
-        start();
-    }
+        while (true) {
+            if (p == 378) {
+//                f378();
+//                continue;
+                System.out.println();
+            }
+            if (p == 684) {
+//                f684();
+//                continue;
+                System.out.println();
+            }
+            if (p == 1002) {
+//                f1002();
+//                continue;
+                System.out.println();
+            }
+            if (p == 1563) {
+                System.out.println(1563);
+//                f1563();
+//                continue;
+            }
+            if (p == 1710) {
+                System.out.println(1710);
+//                f1710();
+//                continue;
+            }
 
-    private void debug(int addr) {
-        System.out.println(addr);
-        dump(addr);
-    }
+            System.out.println("Brutforce: " + p);
+            int a = get(p);
+            int b = get(p+1);
+            int c = get(p+2);
 
-    //Main
-    // stack head = 1842
-    //
-    // push 132
-    // push 1563
-    // push 7
-    // goto 378
+            int av = get(a);
+            int bv = get(b);
+            int d = bv - av;
+            set(b, d);
 
-    private void start() {
-        set(7, 1842);
-        push(132);
-        push(1563);
-        push(20);
-        call(378);
-    }
+//            out.print(String.format("%4d - a: %5d, b: %5d, c: %5d, av: %5d, bv: %5d, av-bv=%5d -> ", p, a, b, c, av, bv, d));
+//            out.print(String.format("%5d%5d%5d     m%-7d= m%d - m%d = %d", a, b, c, b, b, a, d));
+            out.print(String.format("%5d%5d%5d     m%-7d= m%d - m%d = %d", mem[p], mem[p+1], mem[p+2], b, b, a, d));
 
-    int depth = 0;
-    private void f378() {
-        debug(378);
+            if (d <= 0 && c != p+3) {
+                p = c;
+                out.println(String.format("   -> %d", p));
+            } else {
+                p = p+3;
+                out.println();
+            }
 
-        int x = pop();
-        for (; x > 1; --x) {
-            push(x-1);
-            push(684);
+
+            if (p == goal) {
+                break;
+            }
         }
-
-        int addr = pop();
-        push(1 - x);
-
-        ++depth;
-        call(addr);
-        --depth;
+        System.out.println(get(p));
     }
 
-    private void dump(int source) {
-        int m7 = get(7);
-        out.print(String.format("%5d: ", source));
-        for (int i= 1842; i < m7; ++i) {
-            out.print(get(i) + " ");
-        }
-        out.println();
-        out.flush();
-    }
-
-    // A = pop (->493)
-    // B = pop (->436)
-    // X = B - 1 (->751)
-    // push B
-    // push A
-    // push 1002
-    // push B - 1
-    // goto 378
-    // [...B A] => [... B A 1002 B-1] && goto 378
     private void f684() {
-        debug(684);
-
         int m7 = get(7);
-        int b = get(m7 - 2);
+        int mm2 = get(m7 - 2);
 
-        push(1002);
-        push(b - 1);
+        set(m7, 1002);
+        set(m7 + 1, mm2 - 1);
 
-        f378();
-    }
+        int mm1 = get(m7 + 1);
 
-    // A = pop
-    // push 1710
-    // push A
-    // goto 378
-    //[.. A] => [.. 1710 A] && goto 378
-    private void f1563() {
-        debug(1563);
+        if (mm1 == 0) {
+            p = 1296;
+            set(7, m7 + 1);
 
-        int a = pop();
-
-        push(1710);
-        push(a);
-
-        f378();
-//
-//        int m7 = get(7);
-//        int mm1 = get(m7 - 1);
-//
-//        set(m7 - 1, 1710);
-//        set(m7, mm1);
-//        set(7, m7 + 1);
-//
-//        f378();
-    }
-
-    // A = pop
-    // B = pop
-    // C = pop
-    // ADDR = pop
-    // D = (A+B)*C
-    // push D
-    // goto ADDR
-    //[... ADDR C B A] => [.. (A+B)*C] && goto ADDR
-    private void f1002() {
-        debug(1002);
-
-        int a = pop();
-        int b = pop();
-        int c = pop();
-        int addr = pop();
-
-        push((a + b) * c);
-
-        call(addr);
-    }
-
-    private void call(int addr) {
-        if (addr == 378) {
-            f378();
-        } else if (addr == 1002) {
-            f1002();
-        } else if (addr == 684) {
-            f684();
-        } else if (addr == 1563) {
-            f1563();
-        } else if (addr == 1710) {
-            f1710();
-        } else if (addr == 132) {
-            f132();
-        } else {
-            throw new IllegalStateException("Unknown function: " + addr);
+            set(421, 1);
+            return;
         }
-    }
 
-    public void f1710() {
-    }
+        set(421, 0);
 
-    private void f132() {
-        System.out.println("Result: " + pop());
-    }
+        if (mm1 == 1) {
+            p = 1296;
+            set(7, m7 + 1);
+            return;
+        }
 
-    public int pop() {
-        int m7 = get(7) - 1;
-        set(7, m7);
-        return get(m7);
-    }
-
-    public void push(int value) {
-        int m7 = get(7);
-        set(m7, value);
+        for (int i = mm1 - 1; i >= 1; i--) {
+            set(m7 + 2, 684);
+            set(m7 + 1, i);
+            m7 += 2;
+        }
+        set(m7 + 1, 1);
         set(7, m7 + 1);
+
+
+//        p = 1296;
+        int mm7 = get(m7);
+
+        int m421 = get(421);
+
+        set(m7, m421);
+        set(1397, mm7);
+
+        p = mm7;
+    }
+
+    private void f378() {
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+
+        if (mm1 == 0) {
+            p = 1296;
+            set(421, 1);
+            set(7, m7 - 1);
+            return;
+        }
+
+        set(421, 0);
+
+        if (mm1 == 1) {
+            set(7, m7 - 1);
+            p = 1296;
+            return;
+        }
+
+        for (int i = mm1 - 1; i >= 1; i--) {
+            set(m7, 684);
+            set(m7 - 1, i);
+            m7 += 2;
+        }
+        set(m7 - 1, 1);
+
+        set(7, m7 - 1);
+
+        int mm7 = get(m7 - 2);
+
+        int m421 = get(421);
+
+        set(m7 - 2, m421);
+        set(1397, mm7);
+
+        p = mm7;
+    }
+
+    private void f1002() {
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+        int mm2 = get(m7 - 2);
+        int mm3 = get(m7 - 3);
+        int mm4 = get(m7 - 4);
+
+        set(m7 - 1, mm2 + mm1);
+        set(m7 - 2, mm3);
+        set(m7 - 3, (mm1 + mm2) * mm3);
+        set(m7 - 4, (mm1 + mm2) * mm3);
+
+        set(7, m7 - 3);
+
+        set(1397, mm4);
+        p = mm4;
+    }
+
+    private void f1563() {
+//        0    0 1638     m[m7` - 1]  = m1591 = 1710
+//        0    0 1695     m[m7`]  = m[m7` - 1] = 1854
+//        0    7 1704     m7      = m7` + 1 = 1845
+
+        int m7 = get(7);
+        int mm1 = get(m7 - 1);
+
+        set(m7 - 1, 1710);
+        set(m7, mm1);
+        set(7, m7 + 1);
+
+        p = 378;
+    }
+
+    private void f1269() {
+        int m7 = get(7);
+        int mm7 = get(m7 - 1);
+
+        set(7, m7 - 1);
+        set(421, mm7);
+
+        f1296();
+    }
+
+    private void f1296() {
+        int m7 = get(7);
+        int mm7 = get(m7 - 1);
+        int m421 = get(421);
+
+        set(m7 - 1, m421);
+        set(1397, mm7);
+
+        p = mm7;
     }
 
     public int get(int p) {
