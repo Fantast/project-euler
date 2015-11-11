@@ -466,6 +466,10 @@ public class MyMath {
     /**
      * Euler's totient function
      */
+    public static long totient(long n) {
+        return phi(n);
+    }
+
     public static long phi(long n) {
         if (n == 1) {
             return 0;

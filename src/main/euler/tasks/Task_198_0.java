@@ -49,8 +49,8 @@ public class Task_198_0 extends AbstractTask {
                 LongFraction nf = new LongFraction(f1.numer + f2.numer, f1.denom + f2.denom);
                 if (nf.denom == i) {
                     all2.add(nf);
-                    System.out.println("asdfasdfasfd");
-                    System.out.println("\0");
+                    System.out.println(nf);
+//                    System.out.println("\0");
                 }
 
                 f1 = f2;

@@ -2,14 +2,14 @@ package tasks;
 
 import utils.LongFraction;
 import utils.log.Logger;
+import utils.pairs.Pair;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static utils.MyMath.gcd;
 
 //Answer :
+// see: https://www.wikiwand.com/en/Stern%E2%80%93Brocot_tree
 public class Task_198 extends AbstractTask {
     public static void main(String[] args) {
         Logger.init("default.log");
@@ -18,7 +18,6 @@ public class Task_198 extends AbstractTask {
     }
 
     public long LIM = 1000;
-//    public long LIM = 6;
 
 //    For 10^3, 2285
 //    For 10^5, < 1/100, I got 50271 = (321 + 49950) correct
@@ -34,18 +33,19 @@ public class Task_198 extends AbstractTask {
     public int c1;
     public int c2;
 
-    Set<LongFraction> res = new HashSet<>();
+    Map<LongFraction, Set<From>> res = new HashMap<>();
+//    Set<LongFraction> res = new HashSet<>();
 
     public void solving() {
 
         n1[0] = 0;
-        d1[0] = 1231231;
-        System.out.println("asdfasdfasdfasdf");
-        n1[1] = 1123;
+        d1[0] = 1;
+        n1[1] = 1;
         d1[1] = 1;
         c1 = 2;
 
         for (long i = 2; i <= LIM; ++i) {
+            progress100(i);
 //            if (progress1000(i)) {
 //                System.out.println(c1);
 //                System.out.println(res.size());
@@ -95,25 +95,61 @@ public class Task_198 extends AbstractTask {
 //                System.out.print(n1[j] + "/" + d1[j] + ", ");
 //            }
 //            System.out.println();
+//            System.out.println();
         }
 
         System.out.println(res.size());
-        System.out.println(new TreeSet<>(res));
+        for (Map.Entry<LongFraction, Set<From>> e : new TreeMap<>(res).entrySet()) {
+            if (e.getValue().size() > 1) {
+                System.out.println(e.getKey() + ": " + e.getValue());
+            }
+        }
+//        System.out.println(new TreeMap<>(res));
     }
 
     public void reg(long n1, long d1, long n2, long d2) {
         long n = n1*d2 + n2*d1;
         long d = d1*d2*2;
-        long g = gcd(n, d);
+//        if (n*100 >= d) {
+//            return;
+//        }
 
+        long g = gcd(n, d);
         d /= g;
 
         if (d <= LIM) {
             n /= g;
-            if (n*100 >= d) {
-                return;
+            LongFraction key = new LongFraction(n, d);
+//            res.add(key);
+
+            Set<From> from = res.get(key);
+            if (from == null) {
+                if (!(n2 == 1 && d2 == 1) && !(n1 == 0)) {
+                    System.out.println(key + " : " + new From(n1, d1, n2, d2));
+                }
+                res.put(key, from = new TreeSet<From>());
             }
-            res.add(new LongFraction(n, d));
+            from.add(new From(n1, d1, n2, d2));
+        }
+    }
+
+    static class From implements Comparable<From>{
+        final LongFraction f1;
+        final LongFraction f2;
+
+        public From(long n1, long d1, long n2, long d2) {
+            f1 = new LongFraction(n1, d1);
+            f2 = new LongFraction(n2, d2);
+        }
+
+        @Override
+        public int compareTo(From o) {
+            int cmp = f1.compareTo(o.f1);
+            return cmp != 0 ? cmp : f2.compareTo(f2);
+        }
+
+        public String toString() {
+            return "(" + f1 + " + " + f2 + ")";
         }
     }
 }
