@@ -2,7 +2,6 @@ package tasks;
 
 import utils.LongFraction;
 import utils.log.Logger;
-import utils.pairs.Pair;
 
 import java.util.*;
 
@@ -17,7 +16,7 @@ public class Task_198 extends AbstractTask {
         Logger.close();
     }
 
-    public long LIM = 1000;
+    public long LIM = 40;
 
 //    For 10^3, 2285
 //    For 10^5, < 1/100, I got 50271 = (321 + 49950) correct
@@ -70,10 +69,23 @@ public class Task_198 extends AbstractTask {
 
                 g = gcd(num, den);
                 den /= g;
+                num /= g;
 
                 if (den == i) {
-                    n2[c2] = num / g;
+                    n2[c2] = num;
                     d2[c2++] = den;
+                    if ((num == 9 && den == 40)
+                            || (num == 2 && den == 9)
+                            || (num == 1 && den == 5)
+                            || (num == 1 && den == 4)
+                            || (num == 1 && den == 3)
+                            || (num == 1 && den == 2)
+                            || (num == 7 && den == 31)
+                            || (num == 5 && den == 22)
+                            || (num == 3 && den == 13)
+                            ) {
+                        System.out.println(new LongFraction(num, den) + " : " + new From(num1, den1, num2, den2));
+                    }
                 }
 
                 n2[c2] = num2;
@@ -99,11 +111,11 @@ public class Task_198 extends AbstractTask {
         }
 
         System.out.println(res.size());
-        for (Map.Entry<LongFraction, Set<From>> e : new TreeMap<>(res).entrySet()) {
-            if (e.getValue().size() > 1) {
-                System.out.println(e.getKey() + ": " + e.getValue());
-            }
-        }
+//        for (Map.Entry<LongFraction, Set<From>> e : new TreeMap<>(res).entrySet()) {
+//            if (e.getValue().size() > 1) {
+//                System.out.println(e.getKey() + ": " + e.getValue());
+//            }
+//        }
 //        System.out.println(new TreeMap<>(res));
     }
 
@@ -124,9 +136,9 @@ public class Task_198 extends AbstractTask {
 
             Set<From> from = res.get(key);
             if (from == null) {
-                if (!(n2 == 1 && d2 == 1) && !(n1 == 0)) {
-                    System.out.println(key + " : " + new From(n1, d1, n2, d2));
-                }
+//                if (!(n2 == 1 && d2 == 1) && !(n1 == 0)) {
+//                    System.out.println(key + " : " + new From(n1, d1, n2, d2));
+//                }
                 res.put(key, from = new TreeSet<From>());
             }
             from.add(new From(n1, d1, n2, d2));
