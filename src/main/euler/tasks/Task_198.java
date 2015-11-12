@@ -3,7 +3,8 @@ package tasks;
 import utils.LongFraction;
 import utils.log.Logger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static utils.MyMath.gcd;
 
@@ -16,136 +17,92 @@ public class Task_198 extends AbstractTask {
         Logger.close();
     }
 
-    public long LIM = 40;
+    public long LIM = 100000;
 
 //    For 10^3, 2285
 //    For 10^5, < 1/100, I got 50271 = (321 + 49950) correct
 //    For 10^6, < 1/100, I got 509718 = (9768 + 499950) miss some
 
-    public long n1[] = new long[400000];
-    public long d1[] = new long[400000];
-
-    public long n2[] = new long[400000];
-    public long d2[] = new long[400000];
-    public long t[];
-
-    public int c1;
-    public int c2;
-
-    Map<LongFraction, Set<From>> res = new HashMap<>();
-//    Set<LongFraction> res = new HashSet<>();
+    Map<LongFraction, From> res = new HashMap<>();
 
     public void solving() {
-
-        n1[0] = 0;
-        d1[0] = 1;
-        n1[1] = 1;
-        d1[1] = 1;
-        c1 = 2;
-
-        for (long i = 2; i <= LIM; ++i) {
-            progress100(i);
-//            if (progress1000(i)) {
-//                System.out.println(c1);
-//                System.out.println(res.size());
-//            }
-
-            long num1, den1, num2, den2, num, den, g;
-            num1 = n1[0];
-            den1 = d1[0];
-
-            n2[0] = num1;
-            d2[0] = den1;
-            c2 = 1;
-
-            for (int j = 1; j < c1; ++j) {
-                num2 = n1[j];
-                den2 = d1[j];
-
-                reg(num1, den1, num2, den2);
-
-                num = num1 + num2;
-                den = den1 + den2;
-
-                g = gcd(num, den);
-                den /= g;
-                num /= g;
-
-                if (den == i) {
-                    n2[c2] = num;
-                    d2[c2++] = den;
-                    if ((num == 9 && den == 40)
-                            || (num == 2 && den == 9)
-                            || (num == 1 && den == 5)
-                            || (num == 1 && den == 4)
-                            || (num == 1 && den == 3)
-                            || (num == 1 && den == 2)
-                            || (num == 7 && den == 31)
-                            || (num == 5 && den == 22)
-                            || (num == 3 && den == 13)
-                            ) {
-                        System.out.println(new LongFraction(num, den) + " : " + new From(num1, den1, num2, den2));
-                    }
-                }
-
-                n2[c2] = num2;
-                d2[c2++] = den2;
-
-                num1 = num2;
-                den1 = den2;
-            }
-
-//            if (100L*n2[c2-2] >= d2[c2-2]) {
-//                --c2;
-//            }
-
-            t = n1; n1 = n2; n2 = t;
-            t = d1; d1 = d2; d2 = t;
-            c1 = c2;
-
-//            for (int j = 0; j < c1; ++j) {
-//                System.out.print(n1[j] + "/" + d1[j] + ", ");
-//            }
-//            System.out.println();
-//            System.out.println();
+        for (int i = 1; i <= LIM; ++i) {
+            progress1000(i);
+            farey(i);
         }
-
         System.out.println(res.size());
-//        for (Map.Entry<LongFraction, Set<From>> e : new TreeMap<>(res).entrySet()) {
-//            if (e.getValue().size() > 1) {
-//                System.out.println(e.getKey() + ": " + e.getValue());
+
+
+
+//        for (Map.Entry<LongFraction, From> e : new TreeMap<>(res).entrySet()) {
+//            From f = e.getValue();
+//            boolean print = !(f.f2.numer == 1 && f.f2.denom == 1) && f.f1.numer != 0;
+//            print &= lcm(f.f1.denom, f.f2.denom)*2 != e.getKey().denom;
+//            if (print) {
+//                System.out.println(e.getKey() + " -> " + e.getValue());
 //            }
 //        }
-//        System.out.println(new TreeMap<>(res));
     }
 
-    public void reg(long n1, long d1, long n2, long d2) {
-        long n = n1*d2 + n2*d1;
-        long d = d1*d2*2;
-//        if (n*100 >= d) {
-//            return;
-//        }
+    private void farey(long n) {
+        long a = 0;
+        long b = 1;
+        long c = 1;
+        long d = n;
 
-        long g = gcd(n, d);
-        d /= g;
+//        System.out.println(a + "/" + b);
+        while (c <= n) {
+            long k = (n + b) / d;
+            long aprev = a;
+            long bprev = b;
 
-        if (d <= LIM) {
-            n /= g;
-            LongFraction key = new LongFraction(n, d);
-//            res.add(key);
+            a = c;
+            b = d;
+            c = k * c - aprev;
+            d = k * d - bprev;
 
-            Set<From> from = res.get(key);
-            if (from == null) {
-//                if (!(n2 == 1 && d2 == 1) && !(n1 == 0)) {
-//                    System.out.println(key + " : " + new From(n1, d1, n2, d2));
-//                }
-                res.put(key, from = new TreeSet<From>());
+            if (!reg(aprev, bprev, a, b, n)) {
+                break;
             }
-            from.add(new From(n1, d1, n2, d2));
         }
     }
 
-    static class From implements Comparable<From>{
+    public boolean reg(long a1, long b1, long a2, long b2, long n) {
+        if (b1 != n && b2 != n) {
+            return true;
+        }
+        long a = a1 * b2 + a2 * b1;
+        long b = b1 * b2 * 2;
+
+        if (a*100 >= b) {
+            return false;
+        }
+
+        long g = gcd(a, b);
+        b /= g;
+
+        if (b <= LIM) {
+            a /= g;
+
+            From f = new From(a1, b1, a2, b2);
+            LongFraction key = new LongFraction(a, b);
+
+            boolean print = !(a2 == 1 && b2 == 1) && a1 != 0;
+//            print &= lcm(b1, b2)*2 != b;
+//            print &= gcd(b1, b2) != 1;
+            if (print) {
+//                Logger.out.println(key + " -> " + f);
+                System.out.println(key + " -> " + f);
+                res.put(key, f);
+            }
+
+//            res.put(key, f);
+        }
+
+        return true;
+    }
+
+    static class From implements Comparable<From> {
         final LongFraction f1;
         final LongFraction f2;
 
