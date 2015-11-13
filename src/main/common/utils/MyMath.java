@@ -322,6 +322,11 @@ public class MyMath {
         MAX_PRIMES_TO_CACHE = maxPrimesToCache;
     }
 
+    public static long[] primes(int maxCount) {
+        setMaxPrimesToCache(maxCount);
+        return getCachedPrimesInternal();
+    }
+
     private static void initPrimesList() {
         if (cachedPrimes != null) {
             return;
