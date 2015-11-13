@@ -269,10 +269,10 @@ public class MyMath {
         return all;
     }
 
-    public static Map<Long, Integer> factor(long n) {
+    public static TreeMap<Long, Integer> factor(long n) {
         initPrimesList();
 
-        Map<Long, Integer> all = new HashMap<>();
+        TreeMap<Long, Integer> all = new TreeMap<>();
 
         long sqN = (long) Math.sqrt(n);
 
