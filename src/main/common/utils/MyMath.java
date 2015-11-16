@@ -477,7 +477,7 @@ public class MyMath {
 
     public static long phi(long n) {
         if (n == 1) {
-            return 0;
+            return 1;
         }
         long res = n;
         ArrayList<Long> divs = getPrimeDivisors(n);
@@ -784,6 +784,11 @@ public class MyMath {
     public static long modInverse(long a, long mod) {
         long inv = inverseEuclid(a, mod);
         return inv < 0 ? mod + inv : inv;
+    }
+
+    public static long modInverse2(long a, long mod) {
+        long inv = inverseEuclid(a, -mod);
+        return inv;
     }
 
     public static long modPow(long n, long pow, long mod) {
