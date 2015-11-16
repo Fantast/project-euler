@@ -7,6 +7,7 @@
 - lucky problems to solve
     - !163, 189, 219, !223, !237, !259, .261
 
+- totient (phi) values sieve: 512 (discussion thread proposes even faster way to compute "totient sums")
 
 !!Math atlas: http://www.math.niu.edu/~rusin/known-math/index/11PXX.html
 
