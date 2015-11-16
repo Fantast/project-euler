@@ -855,4 +855,26 @@ public class MyMath {
 
         return R;
     }
+
+    public static long[] computePhis(int n) {
+        long phi[] = new long[n+1];
+        phi[1] = 1;
+        for (int i = 2; i <= n; ++i) {
+            if (phi[i] == 0) {
+                phi[i] = i - 1;
+                for (int j = 2; i * j <= n; ++j) {
+                    if (phi[j] != 0) {
+                        int q = j;
+                        int f = i - 1;
+                        while (q % i == 0) {
+                            f *= i;
+                            q /= i;
+                        }
+                        phi[i * j] = f * phi[q];
+                    }
+                }
+            }
+        }
+        return phi;
+    }
 }

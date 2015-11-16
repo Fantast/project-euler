@@ -7,6 +7,7 @@ import utils.log.Logger;
 import java.math.BigInteger;
 
 import static java.math.BigInteger.ONE;
+import static utils.MyMath.computePhis;
 import static utils.MyMath.totient;
 
 //Answer : 50660591862310323
@@ -22,7 +23,7 @@ public class Task_512 extends AbstractTask {
 
     BigInteger b2 = bi(2);
 
-    long phi[] = new long[n+1];
+    long phi[] = computePhis(n);
 
     private void f(long i) {
         BigInteger phi = bi(totient(i));
@@ -44,8 +45,6 @@ public class Task_512 extends AbstractTask {
     }
 
     public void solving() {
-        computePhi();
-
         long res = 0;
         for (int i = 1; i <= n; ++i) {
 //            BigInteger phi = bi(totient(i));
@@ -71,20 +70,5 @@ public class Task_512 extends AbstractTask {
             res += i%2==0 ? 0 : phi[i];
         }
         System.out.println(res);
-    }
-
-    private void computePhi() {
-        for (int i = 1; i <= n; ++i) {
-            phi[i] = i;
-        }
-
-        for (int i = 2; i <= n; ++i) {
-            progress1000000(i);
-            if (phi[i] == i) {
-                for (int j = i; j <= n; j+=i) {
-                    phi[j] = phi[j] - phi[j]/i;
-                }
-            }
-        }
     }
 }
