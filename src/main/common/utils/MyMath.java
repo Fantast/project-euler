@@ -877,4 +877,13 @@ public class MyMath {
         }
         return phi;
     }
+
+    public static long[] factorials(int n) {
+        long factorial[] = new long[n];
+        factorial[0] = 1;
+        for (int i = 1; i < factorial.length; ++i) {
+            factorial[i] = factorial[i-1] * i;
+        }
+        return factorial;
+    }
 }

@@ -2,6 +2,7 @@ package solved;
 
 import tasks.AbstractTask;
 import tasks.Tester;
+import utils.MyMath;
 import utils.log.Logger;
 
 //Answer : 194505988824000
@@ -14,16 +15,10 @@ public class Task_491 extends AbstractTask {
 
     @SuppressWarnings("PointlessArithmeticExpression")
     int SUM = (0 + 9) * 10 / 2 * 2;
-    long factorial[] = new long[11];
+    long factorial[] = MyMath.factorials(11);
 
     public void solving() {
-        factorial[0] = 1;
-        for (int i = 1; i < factorial.length; ++i) {
-            factorial[i] = factorial[i-1] * i;
-        }
-
         take(0, 0, 0);
-
         System.out.println(res);
     }
 
