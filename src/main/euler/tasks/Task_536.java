@@ -12,34 +12,33 @@ public class Task_536 extends AbstractTask {
     }
 
     public void solving() {
-        MyMath.primes(100);
-        System.out.println(check(21));
-        for (long m = 1; m <= 113; ++m) {
+        MyMath.primes(100000);
+        long s = 0;
+        for (long m = 1; m <= 100; ++m) {
+            progress1000(m);
             int mm = check(m);
             if (mm != -1) {
-                System.out.println(m  + ": " + mm);
-//                System.out.print(m  + ",");
+                System.out.print(mm  + " ");
+//                if ((m + 4 - mm)%(mm-1) == 0) {
+////                    System.out.println(m  + ": " + mm);
+//                    s+= m;
+//                }
             }
-//            long phi = MyMath.phi(m);
-//            long m3 = m+3;
-//            if ((m+3)%phi == 0 && m3/phi > 1) {
-//                System.out.println(m);
-//            }
-//            System.out.println(phi);
         }
+//        System.out.println(s);
     }
 
     private int check(long m) {
-        System.out.println(m);
-        TOP: for (int p = 6; p <= m+4; ++p) {
+//        System.out.println(m);
+        TOP: for (int p = 2; p <= m+4; ++p) {
             for (int a = 1; a <= m; ++a) {
 //                if (MyMath.modPow(a, p, m) != a%m) {
                 if (MyMath.modPow(a, p, m) != 1) {
                     continue TOP;
                 }
             }
-            System.out.println("  " + p);
-//            return p;
+//            System.out.println("  " + p);
+            return p;
         }
         return -1;
     }
