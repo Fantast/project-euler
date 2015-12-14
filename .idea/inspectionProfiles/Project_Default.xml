@@ -3,6 +3,7 @@
     <option name="myName" value="Project Default" />
     <option name="myLocal" value="false" />
     <inspection_tool class="CheckTagEmptyBody" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Duplicates" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="JavaDoc" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="TOP_LEVEL_CLASS_OPTIONS">
         <value>
@@ -35,6 +36,10 @@
       <option name="myAdditionalJavadocTags" value="" />
     </inspection_tool>
     <inspection_tool class="JavadocReference" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="LoggerInitializedWithForeignClass" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="loggerClassName" value="org.apache.log4j.Logger,org.slf4j.LoggerFactory,org.apache.commons.logging.LogFactory,java.util.logging.Logger" />
+      <option name="loggerFactoryMethodName" value="getLogger,getLogger,getLog,getLogger" />
+    </inspection_tool>
     <inspection_tool class="NullableProblems" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="REPORT_NULLABLE_METHOD_OVERRIDES_NOTNULL" value="true" />
       <option name="REPORT_NOT_ANNOTATED_METHOD_OVERRIDES_NOTNULL" value="true" />
