@@ -3,10 +3,10 @@ package tasks;
 import utils.log.Logger;
 
 //Answer :
-public class Task_ extends AbstractTask {
+public class Task_000 extends AbstractTask {
     public static void main(String[] args) {
         Logger.init("default.log");
-        Tester.test(new Task_());
+        Tester.test(new Task_000());
         Logger.close();
     }
 

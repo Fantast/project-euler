@@ -30,5 +30,7 @@
     <orderEntry type="library" name="Maven: org.jodd:jodd-lagarto:3.6.6" level="project" />
     <orderEntry type="library" name="Maven: org.jodd:jodd-core:3.6.6" level="project" />
     <orderEntry type="library" name="Maven: org.jodd:jodd-log:3.6.6" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.0.0-beta-3595" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-runtime:1.0.0-beta-3595" level="project" />
   </component>
 </module>

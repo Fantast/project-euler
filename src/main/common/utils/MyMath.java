@@ -8,7 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.TreeMap;
 
 import static java.lang.Math.*;
 import static java.math.BigInteger.*;
@@ -774,21 +777,40 @@ public class MyMath {
     }
 
     /**
-     * returnds x from solving ax + n*y == 1
+     * http://www.wikiwand.com/en/Extended_Euclidean_algorithm
+     * solves a*x + b*y = gcd(a,b)
+     * taken from: https://sites.google.com/site/indy256/algo/euclid
+     * returns { gcd(a,b), x, y } such that gcd(a,b) = a*x + b*y
      */
-    public static long inverseEuclid(long a, long n) {
-        long ret[] = solveLinearDiaophanteEq(a, n, 1);
-        return ret[0];
+    public static long[] extendedEuclid(long a, long b) {
+        long x = 1, y = 0, x1 = 0, y1 = 1, t;
+        while (b != 0) {
+            long q = a / b;
+            t = x;
+            x = x1;
+            x1 = t - q * x1;
+            t = y;
+            y = y1;
+            y1 = t - q * y1;
+            t = b;
+            b = a - q * b;
+            a = t;
+        }
+        return a > 0 ? new long[]{a, x, y} : new long[]{-a, -x, -y};
+    }
+
+    public static long[] modInverseWithRem(long a, long mod) {
+        //TODO: if extendedEuclid[0] != 1, than gcd(a, mod) != 1 => no inverse
+        long[] r = extendedEuclid(a, mod);
+        r[1] %= mod;
+        if (r[1] < 0) {
+            r[1] += mod;
+        }
+        return r;
     }
 
     public static long modInverse(long a, long mod) {
-        long inv = inverseEuclid(a, mod);
-        return inv < 0 ? mod + inv : inv;
-    }
-
-    public static long modInverse2(long a, long mod) {
-        long inv = inverseEuclid(a, -mod);
-        return inv;
+        return modInverseWithRem(a, mod)[1];
     }
 
     public static long modPow(long n, long pow, long mod) {
