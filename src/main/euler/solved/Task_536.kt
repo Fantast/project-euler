@@ -111,10 +111,12 @@ class Task_536 : AbstractTask() {
             find(factInd + 1, i + 1, nn);
         }
     }
-}
 
-fun main(args: Array<String>) {
-    Logger.init("default.log")
-    Tester.test(Task_536())
-    Logger.close()
+    companion object {
+        @JvmStatic fun main(args: Array<String>) {
+            Logger.init("default.log")
+            Tester.test(Task_536())
+            Logger.close()
+        }
+    }
 }

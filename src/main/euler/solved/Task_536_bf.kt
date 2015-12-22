@@ -48,10 +48,12 @@ class Task_536_bf : AbstractTask() {
             find(i + 1, nn, cn);
         }
     }
-}
 
-fun main(args: Array<String>) {
-    Logger.init("default.log")
-    Tester.test(Task_536_bf())
-    Logger.close()
+    companion object {
+        @JvmStatic fun main(args: Array<String>) {
+            Logger.init("default.log")
+            Tester.test(Task_536_bf())
+            Logger.close()
+        }
+    }
 }

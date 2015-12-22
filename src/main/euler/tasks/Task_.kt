@@ -6,10 +6,12 @@ import utils.log.Logger
 class Task_ : AbstractTask() {
     override fun solving() {
     }
-}
 
-fun main(args: Array<String>) {
-    Logger.init("default.log")
-    Tester.test(Task_())
-    Logger.close()
+    companion object {
+        @JvmStatic fun main(args: Array<String>) {
+            Logger.init("default.log")
+            Tester.test(Task_())
+            Logger.close()
+        }
+    }
 }
