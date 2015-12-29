@@ -496,6 +496,7 @@ public class MyMath {
     }
 
     public static long pow(long n, int p) {
+        if (p==0) return 1;
         if (p==1) return n;
         if (p==2) return n*n;
         if (p==3) return n*n*n;
