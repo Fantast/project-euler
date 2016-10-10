@@ -5,7 +5,6 @@ import tasks.Tester
 import utils.MyMath
 import utils.log.Logger
 import java.math.BigInteger
-import kotlin.math.plus
 
 //Answer : 3557005261906288
 class Task_536_bf : AbstractTask() {

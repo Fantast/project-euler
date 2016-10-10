@@ -11,7 +11,7 @@
     <name>Project Euler</name>
 
     <properties>
-        <kotlin.version>1.0.0-beta-3595</kotlin.version>
+        <kotlin.version>1.0.4</kotlin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -54,8 +54,40 @@
                                 <source>src/main/scala</source>
                                 <source>src/main/opener2014</source>
                                 <source>src/main/opener2015</source>
+                                <source>src/main/opener2016</source>
                             </sources>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/main/common</source>
+                                <source>src/main/euler</source>
+                                <source>src/main/scala</source>
+                                <source>src/main/opener2014</source>
+                                <source>src/main/opener2015</source>
+                                <source>src/main/opener2016</source>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>process-test-sources</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -63,55 +95,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <id>kotlin</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jetbrains.kotlin</groupId>
-                        <artifactId>kotlin-maven-plugin</artifactId>
-                        <version>${kotlin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>compile</id>
-                                <phase>process-sources</phase>
-                                <goals>
-                                    <goal>compile</goal>
-                                </goals>
-                                <configuration>
-                                    <sourceDirs>
-                                        <source>src/main/opener2015</source>
-                                        <source>src/main/scala</source>
-                                        <source>src/main/opener2014</source>
-                                        <source>src/main/euler</source>
-                                        <source>src/main/common</source>
-                                    </sourceDirs>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>test-compile</id>
-                                <phase>process-test-sources</phase>
-                                <goals>
-                                    <goal>test-compile</goal>
-                                </goals>
-                                <configuration>
-                                    <sourceDirs>
-                                        <source>src/test/java</source>
-                                    </sourceDirs>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-stdlib</artifactId>
-                    <version>${kotlin.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
         <profile>
             <id>scala</id>
             <build>
@@ -186,6 +169,17 @@
             <groupId>org.jodd</groupId>
             <artifactId>jodd-lagarto</artifactId>
             <version>3.6.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
